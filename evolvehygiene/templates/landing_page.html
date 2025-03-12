@@ -1,0 +1,204 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/landing_page.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <title>Seller Index</title>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="nav">
+        <div class="logo">
+            <img src="{% static 'image/evolve-logo.png' %}" alt="Evolve Logo">
+        </div>
+        <div class="left">
+            <a href="{% url 'landing_page' %}">Home</a>
+            <a href="{% url 'about_us' %}">About Us</a>
+            <a href="{% url 'our_product' %}">Our Products</a>
+            <a href="#">Contact</a>
+        </div>
+        <div class="right">
+            <i class="bi bi-search"><input type="text" placeholder="Search..."></i>
+        </div>
+        <div class="account">
+            <i class="bi bi-person-square"></i>
+            <div class="dropdown">
+                <!-- <a href="#">Profile</a>
+                <a href="#">Settings</a> -->
+                <a href="#">REGISTER</a>
+                <a href="{% url 'login' %}">LOGIN</a>
+            </div>
+        </div>
+    </div>
+
+    <section class="hero">
+        <div class="overlay">
+            <h1>EVOLVE HYGIENE WELCOMES YOU ! <br> STAY EVOLVED</h1>
+            <!-- <img src="{% static 'image/Evolve Hygiene-building.png' %}" alt=""> -->
+            <p>Evolve Hygiene : where purity meets innovation.</p>
+            <br>
+            <p>"Hygiene is not just a choice, it's a lifestyle.
+                Evolve with us for a fresher tomorrow.
+                Because every clean space tells a story of care."</p>
+            
+        </div>
+    </section>
+
+    <div class="categories-title">
+        <h2>OUR PRODUCTS</h2> 
+    </div>
+    
+    <div class="categories">
+        <div class="category">
+            <img src="{% static 'image/hotel-operational.jpg' %}" alt="Hotel Operational Products">
+            <div class="info-hed">
+                <a href="#"><h3>Hotel Operational Products</h3></a>       
+            </div>               
+        </div>
+        
+        <div class="category">
+            <img src="{% static 'image/cleaning-products.jpg' %}" alt="Cleaning Products">
+            <div class="info-hed">
+                <a href="#"><h3>Cleaning Products</h3></a>       
+            </div>               
+        </div>
+
+        <div class="category">
+            <img src="{% static 'image/evolve-bins.jpg' %}" alt="Evolve Bins">
+            <div class="info-hed">
+                <a href="#"><h3>Evolve Bins</h3></a>       
+            </div>               
+        </div>
+
+        <div class="category">
+            <img src="{% static 'image/janitorial-tools.jpg' %}" alt="Home Improvement Cleaning Products">
+            <div class="info-hed">
+                <a href="#"><h3>Home Cleaning Products</h3></a>       
+            </div>               
+        </div>
+    
+    
+        <div class="category">
+            <img src="{% static 'image/dispensers.jpg' %}" alt="Dispensers">
+            <div class="info-hed">
+                <a href="#"><h3>Dispensers</h3></a>       
+            </div>               
+        </div>
+    
+        <div class="category">
+            <img src="{% static 'image/tissue Products.jpg' %}" alt="Tissue Paper Products">
+            <div class="info-hed">
+                <a href="#"><h3>Tissue Paper Products</h3></a>       
+            </div>               
+        </div>
+    </div>
+
+    <div class="view-all-product-btn">
+        <a href="#"><button>View All Products</button></a>
+    </div>
+
+    <div class="demo-1">
+        
+        <h1 >"THE PRODUCTS WE OFFER ARE IMPECCABLE IN ITS CLASS AND DELIVER SUBSTANTIAL CLEANING RESULTS"</h1>
+    </div>
+
+    <div class="sub-hed">
+        <h1>"EVOLVE HYGIENE IS THE FIRST TO OFFER COMPLETE SET OF PRODUCTS FOR"</h1>
+        
+    </div>
+    
+    <div class="demo-2">
+        <h1>hello</h1>
+        <!-- <div class="demo-2pic">
+            <img src="{% static 'image/demo-2.jpg' %}" alt="Demo Image">
+        </div>
+        
+        <div class="demo-2text">
+             <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Architecto ratione tempora nihil ad porro quibusdam
+                  excepturi id maiores dolorum quasi. Ea quidem velit voluptatum dignissimos dolor cumque, distinctio laborum non.
+             Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid eius impedit suscipit laboriosam est tenetur aspernatur explicabo iste blanditiis rem cupiditate neque debitis alias similique, corrupti fuga? Recusandae, cum omnis.
+                </p>
+        </div> -->
+    </div>
+    
+   
+    
+
+<!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            
+            <!-- Branding Section -->
+            <div class="footer-branding">
+                <img src="{% static 'image/evolve-logo.png' %}" alt="Chempakam Logo">  
+                <p>© All rights reserved by Evolve Hygiene, Cochin, India.</p>
+                <div class="social-icons">
+                    <a href="#"><i class="bi bi-facebook"></i></a>
+                    <a href="#"><i class="bi bi-twitter"></i></a>
+                    <a href="#"><i class="bi bi-linkedin"></i></i></a>
+                    <a href="#"><i class="bi bi-instagram"></i></a>
+                    <!-- <a href="#"><i class="fab fa-pinterest"></i></a> -->
+                </div>
+            </div>
+
+            <!-- Solutions Section -->
+            <div class="footer-section">
+                <h3>SOLUTIONS</h3>
+                <ul>
+                    <li><a href="#">My Account</a></li>
+                    <li><a href="#">Track Your Order</a></li>
+                    <li><a href="#">Order History</a></li>
+                    <li><a href="#">Payment Methods</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                </ul>
+            </div>
+
+            <!-- About Us Section -->
+            <div class="footer-section">
+                <h3>ABOUT US</h3>
+                <ul>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Terms & Conditions</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Return Policy</a></li>
+                    <li><a href="#">Site Map</a></li>
+                </ul>
+            </div>
+
+            <!-- Contact Us Section -->
+            <div class="footer-section">
+                <h3>CONTACT US</h3>
+                <ul>
+                    <li><i class="fas fa-map-marker-alt"></i> Phase-1, Hygiene Road, Madavana, Panangad, Ernakulam, Kerala 682506</li>
+                    <li><i class="fas fa-phone"></i> 090726 68921</li>
+                    <li><i class="fas fa-clock"></i> Mon - Sat / 9:30AM - 6:00PM</li>
+                </ul>
+            </div>
+
+        </div>
+    </footer>
+
+</body>
+</html>
+
+    
+   
+    <!-- {% for i in gallery_images %}
+    <div class="gallery-item">
+        <img src="{{ i.feedimage.url }}" alt="Gallery Image" width="300">
+        <span>{{ i.title1 }}</span>
+        <span>{{ i.title2 }}</span>
+        <span>{{ i.title3 }}</span>
+    </div>
+    {% endfor %} -->
+    <!-- <a href="#" class="logout-button">Logout</a> -->
+
+
+</body>
+</html>
+
+</body>
+</html>

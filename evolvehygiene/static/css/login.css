@@ -1,0 +1,110 @@
+/* General Page Styling */
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #c09afe, #94b4f8);
+  }
+  
+  /* Enlarged Login Box */
+  .login-box {
+    background: rgba(0, 0, 0, 0.85);
+    padding: 50px;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(121, 188, 255, 0.5);
+    text-align: center;
+    width: 450px; /* Increased width */
+    height: 550px; /* Increased height */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  /* Heading */
+  h2 {
+    color: #d7c4ef;
+    font-size: 26px;
+    margin-bottom: 25px;
+    text-transform: uppercase;
+  }
+  
+  /* User Input Fields */
+  .user-box {
+    position: relative;
+    margin-bottom: 40px;
+  }
+  
+  .user-box input {
+    width: 100%;
+    padding: 14px;
+    font-size: 18px;
+    color: #ffffff;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid #d7c4ef;
+    outline: none;
+  }
+  
+  .user-box label {
+    position: absolute;
+    top: 12px;
+    left: 10px;
+    color: rgba(255, 255, 255, 0.6);
+    transition: 0.3s;
+    font-size: 18px;
+  }
+  
+  .user-box input:focus ~ label,
+  .user-box input:valid ~ label {
+    top: -18px;
+    left: 5px;
+    font-size: 14px;
+    color: #d7c4ef;
+  }
+  
+  /* Enlarged Button */
+  button {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    background: #d7c4ef;
+    color: black;
+    font-size: 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+    font-weight: bold;
+  }
+  
+  button:hover {
+    background: #d7c4ef;
+    transform: scale(1.05);
+  }
+  
+  /* Links */
+  .links {
+    margin-top: 20px;
+  }
+  
+  .links p {
+    color: #ffffff;
+    font-size: 16px;
+  }
+  
+  .links a {
+    color: #d7c4ef;
+    text-decoration: none;
+    font-size: 16px;
+    transition: 0.3s;
+    font-weight: bold;
+  }
+  
+  .links a:hover {
+    text-decoration: underline;
+    color: #d7c4ef;
+  }
+  
