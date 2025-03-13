@@ -354,14 +354,15 @@ body {
 }
 
 .grid-item img {
-    width: 50px;
-    height: 50px;
+    width: 80px;
+    height: 80px;
 }
 
 .grid-item p {
     font-size: 14px;
     color: #666;
 }
+
 
 
 
