@@ -18,7 +18,7 @@
             <a href="{% url 'landing_page' %}">Home</a>
             <a href="{% url 'about_us' %}">About Us</a>
             <a href="{% url 'our_product' %}">Our Products</a>
-            <a href="#">Contact</a>
+            <a href="{% url 'contact_us' %}">Contact</a>
         </div>
         <div class="right">
             <i class="bi bi-search"><input type="text" placeholder="Search..."></i>
@@ -28,7 +28,7 @@
             <div class="dropdown">
                 <!-- <a href="#">Profile</a>
                 <a href="#">Settings</a> -->
-                <a href="#">REGISTER</a>
+                <a href="{% url 'register' %}">REGISTER</a>
                 <a href="{% url 'login' %}">LOGIN</a>
             </div>
         </div>

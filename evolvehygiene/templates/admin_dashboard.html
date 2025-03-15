@@ -1,11 +1,42 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    <style>
+ 
+        
+    </style>
 </head>
-<body>
-    <h1>heyyyyyyyyy admin</h1>
+<body class="main">
+    <div class="navbar">
+        <div class="logo">
+            <h2 style="margin: 0; font-size: 1.5rem;">Shoes Kart</h2>
+        </div>
+        <div class="nav-links">
+            <a href="{% url 'product_upload' %}">Upload Product</a>
+            <a href="{% url 'logoutuser' %}">
+                <button>Logout</button>
+            </a>
+        </div>
+    </div>
+
+    <h1>Welcome</h1>
+    <div class="product-grid">
+        {% for i in gallery_images %}
+        <div>
+            <img src="{{ i.feedimage.url }}" alt="Gallery Image">
+            <span>{{ i.name }}</span>
+            <span>{{ i.price }}</span>
+            <span>{{ i.model }}</span>
+            <!-- <a href="{% url 'deletion' i.id %}"><button class="delete-button">Delete</button></a> -->
+            <!-- <a href="{% url 'edit_g' i.id %}"><button class="edit-button">Edit</button></a> -->
+        </div>
+        {% endfor %}
+    </div>
+
 </body>
 </html>
