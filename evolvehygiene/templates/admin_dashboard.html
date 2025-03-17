@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    <link rel="stylesheet" href="{% static 'css/admin_dashboard.css' %}">
     <style>
  
         
@@ -14,7 +14,7 @@
 <body class="main">
     <div class="navbar">
         <div class="logo">
-            <h2 style="margin: 0; font-size: 1.5rem;">Shoes Kart</h2>
+            <h2 style="margin: 0; font-size: 1.5rem;">Shoes cart</h2>
         </div>
         <div class="nav-links">
             <a href="{% url 'product_upload' %}">Upload Product</a>
@@ -26,16 +26,21 @@
 
     <h1>Welcome</h1>
     <div class="product-grid">
-        {% for i in gallery_images %}
+        {% for item in gallery_items %}
         <div>
-            <img src="{{ i.feedimage.url }}" alt="Gallery Image">
-            <span>{{ i.name }}</span>
-            <span>{{ i.price }}</span>
-            <span>{{ i.model }}</span>
-            <!-- <a href="{% url 'deletion' i.id %}"><button class="delete-button">Delete</button></a> -->
-            <!-- <a href="{% url 'edit_g' i.id %}"><button class="edit-button">Edit</button></a> -->
+            <h3>{{ item.name }}</h3>
+            <p>Price: {{ item.price }}</p>
+            <p>Quantity: {{ item.quantity }}</p>
+            <p>Model: {{ item.model }}</p>
+            <p>Offers: {{ item.offers }}</p>
+    
+            {% if item.feedimage_url %}
+                <img src="{{ item.feedimage_url }}" alt="Product Image" style="width: 200px;">
+            {% else %}
+                <p>No image available</p>
+            {% endif %}
         </div>
-        {% endfor %}
+    {% endfor %}
     </div>
 
 </body>

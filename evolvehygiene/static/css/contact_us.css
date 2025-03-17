@@ -80,6 +80,12 @@ header {
     padding: 50px 20px;
     text-align: center;
 }
+.contact-container p {
+    color: red;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
 
 .info-box {
     background: white;

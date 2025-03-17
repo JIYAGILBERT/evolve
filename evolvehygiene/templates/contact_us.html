@@ -51,14 +51,19 @@
     <section class="contact-container">
         <h2>Get In Touch With Us</h2>
         <div class="contact-content">
-            <form class="contact-form">
-                <input type="text" placeholder="Your Name" required>
-                <input type="email" placeholder="Your Email" required>
-                <input type="text" placeholder="Your Subject" required>
-                <textarea placeholder="Your Message" required></textarea>
-                <button type="submit">SEND MESSAGE</button>
-            </form>
-
+    
+            <!-- Show login/register prompt if user is not logged in -->
+            {% if not user.is_authenticated %}
+                <p>You need to <a href="{% url 'login' %}">login</a> or <a href="{% url 'register' %}">register</a> to send a message.</p>
+            {% else %}
+                <!-- Show the form only if the user is logged in -->
+                <form class="contact-form" method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit">SEND MESSAGE</button>
+                </form>
+            {% endif %}
+    
             <!-- Google Maps Embed -->
             <div class="map-container">
                 <iframe 
@@ -68,6 +73,7 @@
             </div>
         </div>
     </section>
+    
 
 
 

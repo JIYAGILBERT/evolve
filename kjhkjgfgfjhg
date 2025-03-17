@@ -9,6 +9,260 @@
 
 
 
+<style>
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body Styling */
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f4f4; /* Light grey background */
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 20px;
+}
+
+/* Main Heading */
+h1 {
+    color: #2874f0; /* Flipkart blue */
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Form Container */
+form {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 500px;
+    margin-bottom: 30px;
+}
+
+/* Form Fields - Common styling for text inputs */
+form input[type="file"],
+form input[type="text"] {
+    width: 100%;
+    padding: 12px 15px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+    background-color: #f9f9f9;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+/* Focus Effect on Inputs */
+form input[type="file"]:focus,
+form input[type="text"]:focus {
+    border-color: #2874f0; /* Flipkart blue */
+    box-shadow: 0 0 8px rgba(40, 116, 240, 0.3);
+    outline: none;
+}
+
+/* Additional styling for model and offers fields */
+input[name="model"],
+input[name="offers"] {
+    width: 100%;
+    padding: 12px 15px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+    background-color: #f9f9f9;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+input[name="model"]:focus,
+input[name="offers"]:focus {
+    border-color: #2874f0;
+    box-shadow: 0 0 8px rgba(40, 116, 240, 0.3);
+    outline: none;
+}
+
+/* Submit Button */
+form button {
+    background-color: #2874f0; /* Flipkart blue */
+    color: white;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+form button:hover {
+    background-color: #0d58d1; /* Darker blue for hover */
+    transform: scale(1.05); /* Slight zoom effect */
+}
+
+/* Gallery Image Display */
+div {
+    width: 100%;
+    max-width: 500px;
+    margin-top: 20px;
+    text-align: center;
+}
+
+div img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Error Message Paragraph */
+p {
+    color: #d32f2f; /* Red for error message */
+    font-size: 16px;
+    font-weight: bold;
+}
+
+/* Logout Link */
+a {
+    display: inline-block;
+    margin-top: 20px;
+    color: #2874f0; /* Flipkart blue */
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 0.3s, text-decoration 0.3s;
+}
+
+a:hover {
+    color: #0d58d1; /* Darker blue for hover */
+    text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    h1 {
+        font-size: 28px;
+    }
+    form {
+        padding: 20px;
+    }
+    form input[type="file"],
+    form input[type="text"],
+    form button {
+        font-size: 14px;
+    }
+    a {
+        font-size: 14px;
+    }
+}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* html {
     height: 100%;
   }
