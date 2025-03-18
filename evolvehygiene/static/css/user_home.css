@@ -9,8 +9,8 @@
 }
 
 body {
-    color: rgb(245, 242, 242);
-    background-color: #090909e6;
+    color: rgb(16, 16, 16);
+    background-color: #fbf5f5e6;
     margin: 0;
     font-family: Arial, sans-serif;
 }
@@ -137,7 +137,8 @@ body {
 }
 
 .overlay {
-    background: linear-gradient(to right, #e47c7c, #e7eaeb);
+    background: linear-gradient(to right, #1f1c2c, #928DAB);
+    /* background: linear-gradient(to right, #4E54C8, #8F94FB); */
     padding: 30px;
     border-radius: 10px;
     width: 100%;
@@ -152,14 +153,15 @@ body {
 }
 
 .overlay h1 {
-    background: linear-gradient(to right, #181818, #930cf3); /* Adjust colors as needed */
+    background: linear-gradient(to right, #87a4fb, #fbf9ef);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    
     font-size: 70px;
     margin-bottom: 20px;
 }
 .overlay p {
-    background: linear-gradient(to right, #0a0909, #f83909); /* Adjust colors as needed */
+    background: linear-gradient(to right, #c0cbec, #fbf9ef); /* Adjust colors as needed */
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     font-size: 20px;

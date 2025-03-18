@@ -54,8 +54,8 @@ def register(request):
 
 
 def userlogin(request):
-    # if 'username' in request.session:
-    #     return redirect('user_home')   
+    if 'username' in request.session:
+        return redirect('user_home')   
 
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -68,7 +68,7 @@ def userlogin(request):
 
             if user.is_superuser:
                 return redirect('admin_dashboard')
-            return redirect('landing_page')
+            return redirect('user_home')
         else:
             messages.error(request, "Invalid credentials.")
 
@@ -88,27 +88,30 @@ def our_product(request):
     return render(request, 'our_product.html')
 
 
-@login_required(login_url='/accounts/login/')  # Redirect to login if not logged in
+# @login_required(login_url='userlogin')  # Redirect to login if not logged in
 def contact_us(request):
-    if request.method == "POST":
-        form = ContactForm(request.POST)
-        if form.is_valid():
-            contact_message = form.save()
+    if 'username' in request.session:
+        if request.method == "POST":
+            form = ContactForm(request.POST)
+            if form.is_valid():
+                contact_message = form.save()
 
-            # Send email
-            send_mail(
-                subject=f"New Contact Form Submission: {contact_message.subject}",
-                message=f"Name: {contact_message.name}\nEmail: {contact_message.email}\n\nMessage:\n{contact_message.message}",
-                from_email="your_email@example.com",
-                recipient_list=["jiyagilbert1@gmail.com"],
-                fail_silently=False,
-            )
-            return redirect('thank_you_page')  # Redirect to 'thank you' page
+                # Send email
+                send_mail(
+                    subject=f"New Contact Form Submission: {contact_message.subject}",
+                    message=f"Name: {contact_message.name}\nEmail: {contact_message.email}\n\nMessage:\n{contact_message.message}",
+                    from_email="your_email@example.com",
+                    recipient_list=["jiyagilbert1@gmail.com"],
+                    fail_silently=False,
+                )
+                return redirect('thank_you_page')  # Redirect to 'thank you' page
 
+        else:
+            form = ContactForm()
+
+        return render(request, 'contact_us.html', {'form': form})
     else:
-        form = ContactForm()
-
-    return render(request, 'contact_us.html', {'form': form})
+        return redirect('userlogin')    
 
 
 def thank_you_page(request):
