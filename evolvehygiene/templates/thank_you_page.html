@@ -1,11 +1,17 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="{% static 'css/thank.css' %}">
+        <title>Thank You</title>
+    </head>
 <body>
-    <h1>THANK YOU</h1>
+    <div class="container">
+        <h1>Thank You!</h1>
+        <p>Since this is where users will reach immediately after opting in to your offer, take a chance to thank them and let them know the next step.</p>
+        <a href="{% url 'user_home' %}" class="button">Home</a>
+    </div>
 </body>
 </html>

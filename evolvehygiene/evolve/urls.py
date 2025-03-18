@@ -20,6 +20,7 @@ urlpatterns = [
     path('contact_us',views.contact_us, name='contact_us'),
     path('thank_you_page',views.thank_you_page, name='thank_you_page'),
      path('accounts/', include('django.contrib.auth.urls')),  # <-- Add this line!
+     
 ] 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

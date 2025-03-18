@@ -1,0 +1,47 @@
+/* Ensure the body takes the full height of the screen and centers content */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: url('{% static "images/demo-1.jpg" %}') no-repeat center center/cover;
+    color: rgb(0, 0, 0);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+}
+
+/* Container for the content */
+.container {
+    /* background: rgba(221, 14, 14, 0.6); */
+    padding: 40px;
+    width: 80%; /* Adjust width to fit the content better */
+    max-width: 600px; /* Max width for larger screens */
+    border-radius: 10px;
+}
+
+/* Style for the title */
+h1 {
+    font-size: 48px;
+    margin-bottom: 20px;
+}
+
+/* Style for the paragraph */
+p {
+    font-size: 18px;
+    margin-bottom: 30px;
+}
+
+/* Button style */
+.button {
+    background-color: #4ecdc4;
+    color: #fff;
+    padding: 15px 30px;
+    text-decoration: none;
+    font-size: 18px;
+    border-radius: 5px;
+}
+
+.button:hover {
+    background-color: #3ba99c;
+}

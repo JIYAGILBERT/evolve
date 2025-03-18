@@ -26,12 +26,13 @@ def landing_page(request):
 
 
 def register(request):
-    if request.POST:
+    if request.method == 'POST':  # Check if the request method is POST
         email = request.POST.get('email')
         username = request.POST.get('username')
         password = request.POST.get('password')
         confirmpassword = request.POST.get('Confirmpassword')
-        print(email,username,password,confirmpassword)
+        print(email, username, password, confirmpassword)
+
         # Validate form fields
         if not username or not email or not password or not confirmpassword:
             messages.error(request, 'All fields are required.')
@@ -42,19 +43,19 @@ def register(request):
         elif User.objects.filter(username=username).exists():
             messages.error(request, "Username already exists.")
         else:
-            # Create the user
-            user = User.objects.create_user(username=username, email=email, password=password,user=request.user)
+            # Create the user without passing 'user=request.user'
+            user = User.objects.create_user(username=username, email=email, password=password)
             user.save()
             messages.success(request, "Account created successfully!")
-            return redirect('login')  # Redirect to login page
+            return redirect('userlogin')  # Redirect to login page
 
-    return render(request,"register.html")
+    return render(request, "register.html")
 
 
 
 def userlogin(request):
-    if 'username' in request.session:
-        return redirect('user_home')   
+    # if 'username' in request.session:
+    #     return redirect('user_home')   
 
     if request.method == 'POST':
         username = request.POST.get('username')
