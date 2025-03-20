@@ -10,67 +10,53 @@
         
 </head>
 <body>
-   <h1>welcome</h1>
-   {% if data1 %}
-    <form action="{% url 'edit_g' data1.id %}" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    <input type="file" name="image" id="image" value="{{data1.myimage}}" required>
-        name
-    <input type="text" name="todo" class="ww" value="{{data1.title1}}"><br><br>
-    price
-    <input type="text" name="date" class="www" value="{{data1.price}}"><br><br>
-    {% comment %} delivery type
-    <input type="text" name="course" class="ww" value="{{data1.title3}}"><br><br> 
-    {% endcomment %}
-    quantity
-    <input type="text" name="course" class="ww" value="{{data1.quantity}}"><br><br>
-    model
-    <input type="address" name="model" class="ww" value="{{data1.model}}"><br><br>
-    offers
-    <input type="address" name="offers" class="ww" value="{{data1.offers}}"><br><br>
-    <!-- <input type="submit" value="submit" class="cc"><br><br> -->
-    <button type="submit" class="cc">submit</button>
-    </form>
-   {% else %}
-
-
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    <label for="name">Product Name:</label>
-    <input type="text" name="name" id="name" required />
-
-    <label for="price">Price:</label>
-    <input type="number" name="price" id="price" required />
-
-    <label for="model">Model:</label>
-    <input type="text" name="model" id="model" required />
-
-    <label for="quantity">Quantity:</label>
-    <input type="number" name="quantity" id="quantity" required />
-
-    <label for="offers">Offers:</label>
-    <input type="text" name="offers" id="offers" />
-
-    <label for="feedimage">Upload Image:</label>
-    <input type="file" name="image" id="image" required />
-
-    <button type="submit">Upload Product</button>
-</form>
-
-
-<div>
-    {% for i in gallery_images %}
-        {% if i.feedimage %}
-            <!-- Display the image here -->
-        {% else %}
-            <p>No image for this gallery item</p>
-        {% endif %}
-    {% empty %}
-        <p>No images uploaded yet.</p>
-    {% endfor %}
-</div>
-
-
-   <a href="{% url 'logoutuser' %}">logout</a>
-</body>
+    <h1>welcome</h1>
+    {% if data1 %}
+     <form action="{% url 'edit_g' data1.id %}" method="post" enctype="multipart/form-data">
+     {% csrf_token %}
+     <input type="file" name="image" id="image" value="{{data1.myimage}}" required>
+         name
+     <input type="text" name="todo" class="ww" value="{{data1.name}}"><br><br>
+     price
+     <input type="text" name="date" class="www" value="{{data1.price}}"><br><br>
+     quantity
+     <input type="text" name="course" class="ww" value="{{data1.quantity}}"><br><br>
+     model
+     <input type="address" name="model" class="ww" value="{{data1.model}}"><br><br>
+     offers
+     <input type="address" name="offers" class="ww" value="{{data1.offers}}"><br><br>
+     <!-- <input type="submit" value="submit" class="cc"><br><br> -->
+     <button type="submit" class="cc">submit</button>
+     </form>
+    {% else %}
+    <form action="{% url 'product_upload' %}" method="post" enctype="multipart/form-data">
+     {% csrf_token %}
+     <label for="image">Upload Image:</label>
+     <input type="file" name="image" id="image" required>
+     company
+     <input type="text" name="name" class="ww"><br><br>
+     price
+     <input type="text" name="price" class="www"><br><br>
+     quantity
+     <input type="text" name="quantity" class="ww"><br><br>
+     model
+     <input type="address" name="model" class="ww"><br><br>
+     offers
+     <input type="address" name="offers" class="ww"><br><br>
+     <button type="submit">Submit</button>
+     {% endif %}
+ </form>
+ <div>
+     {% for i in gallery_images %}
+     {% if i.feedimage %}
+     {% else %}
+         <p>No image for this gallery item</p>
+     {% endif %}
+ {% empty %}
+     <p>No images uploaded yet.</p>
+ {% endfor %}
+ </div>
+ 
+    <a href="{% url 'logout' %}">logout</a>
+ </body>
 </html>

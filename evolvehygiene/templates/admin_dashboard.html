@@ -26,22 +26,31 @@
 
     <h1>Welcome</h1>
     <div class="product-grid">
-        {% for item in gallery_items %}
+        {% for i in gallery_items %}
         <div>
-            <h3>{{ item.name }}</h3>
-            <p>Price: {{ item.price }}</p>
-            <p>Quantity: {{ item.quantity }}</p>
-            <p>Model: {{ item.model }}</p>
-            <p>Offers: {{ item.offers }}</p>
+            <!-- Ensure image displays properly -->
+            <img src="{{ i.feedimage_url }}" alt="Gallery Image" />
     
-            {% if item.feedimage_url %}
-                <img src="{{ item.feedimage_url }}" alt="Product Image" style="width: 200px;">
+            <!-- Display product info -->
+            <span>{{ i.name }}</span>
+            <span>₹{{ i.price }}</span>
+            <span>{{ i.model }}</span>
+    
+            <!-- Only show buttons if the product has a valid ID -->
+            {% if i.id %}
+                <a href="{% url 'deletion' i.id %}">
+                    <button class="delete-button">Delete</button>
+                </a>
+                <a href="{% url 'edit_g' i.id %}">
+                    <button class="edit-button">Edit</button>
+                </a>
             {% else %}
-                <p>No image available</p>
+                <p class="error-msg">Error: Product ID missing!</p>
             {% endif %}
         </div>
-    {% endfor %}
+        {% endfor %}
     </div>
+    
 
 </body>
 </html>

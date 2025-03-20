@@ -1,6 +1,7 @@
 from django.contrib.auth import authenticate, login as auth_login
 from django.contrib.auth import authenticate, login,logout
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404, redirect, render
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from datetime import datetime, timedelta
@@ -85,7 +86,11 @@ def about_us(request):
 
 
 def our_product(request):
-    return render(request, 'our_product.html')
+    # Fetch all products from the Gallery model
+    gallery_items = Gallery.objects.all()
+
+    # Ensure the items are passed to the template properly
+    return render(request, "our_product.html", {"gallery_items": gallery_items})
 
 
 # @login_required(login_url='userlogin')  # Redirect to login if not logged in
@@ -128,7 +133,7 @@ def product_upload(request):
         model = request.POST.get("model")
         offers = request.POST.get("offers")
         myimage = request.FILES['image']  # Correct way to handle files!
-
+        print(name,price,quantity,model,offers,myimage)
         # Ensure no fields are missing (optional: add error handling)
         if not name:
             return render(request, "product_upload.html", {"error": "Name is required"})
@@ -157,52 +162,47 @@ def logoutuser(request):
     return redirect('landing_page')
 
 def admin_dashboard(request):
+    # Fetch products from Gallery model
     gallery_items = Gallery.objects.all()
 
+    # Ensure every item has a valid image URL
     for item in gallery_items:
-        if not item.feedimage:  # Safely handle missing images
+        if not item.feedimage:
             item.feedimage_url = None
         else:
             item.feedimage_url = item.feedimage.url
 
+    # Pass gallery items to the template
     return render(request, "admin_dashboard.html", {"gallery_items": gallery_items})
+
 
 
 def delete_g(request,id):
     feeds=Gallery.objects.filter(pk=id)
     feeds.delete()
-    return redirect('product_upload')
+    return redirect('admin_dashboard')
 
 
 # @login_required
 def edit_g(request, id):
-    gallery_image = get_object_or_404(Gallery, pk=id, user=request.user)
-    
-    if request.method == 'POST':
-        myimage = request.FILES['image']  
-        name=request.POST.get("todo")
-        price=request.POST.get("date")
-        # todo311=request.POST.get("course")
-        quanty=request.POST.get("quant")
-        mod=request.POST.get("model") 
-        off=request.POST.get("offers")
-        
-        if not name or not price or not quanty or not mod or not off:
-            messages.error(request, "All fields are required.")
-            return render(request, 'upload_product.html', {'data1': gallery_image})
-        
-        
-        gallery_image.name = name
-        gallery_image.price = price
-        gallery_image.quantity = quanty
-        gallery_image.model = mod
-        gallery_image.offers = off
-        if myimage: 
-            gallery_image.feedimage = myimage
-        gallery_image.save()
+    # Fetch the product or return 404 if not found
+    product = get_object_or_404(Gallery, id=id)
 
-        messages.success(request, "Gallery item updated successfully!")
-        return redirect('admin_dashboard')
+    if request.method == "POST":
+        product.name = request.POST.get("todo", product.name)
+        product.price = request.POST.get("date", product.price)
+        product.quantity = request.POST.get("quant", product.quantity)
+        product.offers = request.POST.get("offers", product.offers)
+
+        # Handle image update if a new one is uploaded
+        if "image" in request.FILES:
+            product.feedimage = request.FILES["image"]
+
+        # Save the updated product
+        product.save()
+        return redirect("admin_dashboard")
+
+    return render(request, "product_upload.html", {"data1": product})
 
 
 
