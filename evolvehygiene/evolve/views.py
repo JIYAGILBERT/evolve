@@ -54,19 +54,24 @@ def register(request):
 
 
 
-def userlogin(request):
-    if 'username' in request.session:
-        return redirect('user_home')   
+from django.contrib.auth import authenticate, login
+from django.shortcuts import render, redirect
+from django.contrib import messages
 
+def userlogin(request):
+    # If user already logged in, redirect to home
+    if request.user.is_authenticated:
+        return redirect('user_home')
+
+    # Handle login form submission
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
-        user = authenticate(username=username, password=password)
+        user = authenticate(request, username=username, password=password)
 
         if user is not None:
-            login(request, user)
-            request.session['username'] = username
-
+            login(request, user)  # Start session automatically
+            # Redirect based on user type
             if user.is_superuser:
                 return redirect('admin_dashboard')
             return redirect('user_home')
@@ -75,6 +80,11 @@ def userlogin(request):
 
     return render(request, 'userlogin.html')
 
+
+def logoutuser(request):
+    logout(request)
+    # request.session.flush()
+    return redirect('userlogin')
 
 def user_home(request):
     return render(request, 'user_home.html')
@@ -129,37 +139,30 @@ def product_upload(request):
         # Fetch form data properly
         name = request.POST.get("name")
         price = request.POST.get("price")
-        quantity = request.POST.get("quantity")
+        # quantity = request.POST.get("quantity")
         model = request.POST.get("model")
-        offers = request.POST.get("offers")
-        myimage = request.FILES['image']  # Correct way to handle files!
-        print(name,price,quantity,model,offers,myimage)
-        # Ensure no fields are missing (optional: add error handling)
-        if not name:
-            return render(request, "product_upload.html", {"error": "Name is required"})
+        myimage = request.FILES.get('image')  # Safer way to get the file
+
+        # Optional: Basic error handling
+        if not name or not price or not model or not myimage:
+            return render(request, "product_upload.html", {"error": "All fields are required!"})
 
         # Save to the database
         obj = Gallery.objects.create(
             name=name,
             price=price,
             model=model,
-            quantity=quantity,
-            offers=offers,
+            # quantity=quantity,
             feedimage=myimage
         )
         obj.save()
 
-        return redirect(admin_dashboard)
+        return redirect('admin_dashboard')
 
+    # Fetch images for display
     gallery_images = Gallery.objects.all()
     return render(request, "product_upload.html", {"gallery_images": gallery_images})
 
-
-
-def logoutuser(request):
-    logout(request)
-    request.session.flush()
-    return redirect('landing_page')
 
 def admin_dashboard(request):
     # Fetch products from Gallery model
@@ -191,9 +194,7 @@ def edit_g(request, id):
     if request.method == "POST":
         product.name = request.POST.get("todo", product.name)
         product.price = request.POST.get("date", product.price)
-        product.quantity = request.POST.get("quant", product.quantity)
-        product.offers = request.POST.get("offers", product.offers)
-
+       
         # Handle image update if a new one is uploaded
         if "image" in request.FILES:
             product.feedimage = request.FILES["image"]
@@ -203,6 +204,11 @@ def edit_g(request, id):
         return redirect("admin_dashboard")
 
     return render(request, "product_upload.html", {"data1": product})
+
+def search_result(request):
+    query = request.GET.get('q')
+    results = Gallery.objects.filter(name__icontains=query) if query else None
+    return render(request, 'search_results.html', {'results': results, 'query': query}) 
 
 
 

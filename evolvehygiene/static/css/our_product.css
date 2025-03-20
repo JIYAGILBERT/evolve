@@ -59,86 +59,83 @@
     border: 2px solid #dddddd08;
     outline: none;
 }
-    /* Product Grid */
-    .product-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Adjust the minimum width */
-        gap: 15px; /* Reduce the gap between items */
-        padding: 20px;
-        max-width: 800px; /* Set a maximum width for the entire grid */
-        margin: 0 auto; /* Center the grid within the page */
-    }
-    
-    .product-grid div {
-        background: #ffffff;
-        border: 1px solid #ddd;
-        border-radius: 10px;
-        padding: 15px;
-        text-align: center;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s, box-shadow 0.3s;
-        width: 90%; /* Minimize the individual product card width */
-        margin: 0 auto; /* Center the product cards */
-    }
-    
-    
-            /* Image Styling */
-            .product-grid img {
-                max-width: 150px; /* Set a maximum width for the images */
-                height: 200px; /* Maintain a consistent height */
-                object-fit: cover; /* Crop the image if necessary to fit dimensions */
-                border-radius: 10px;
-                margin-bottom: 10px;
-            }
-            .product-grid span {
-                display: block;
-                font-size: 1rem;
-                margin: 5px 0;
-                color: #555;
-            }
-    
-            /* Edit Button Styling */
-    .edit-button {
-        background-color: #4caf50; /* Green background */
-        color: white;
-        border: none;
-        padding: 8px 12px;
-        font-size: 14px;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-    }
-    
-    .edit-button:hover {
-        background-color: #388e3c; /* Darker green on hover */
-    }
-    
-    /* Delete Button Styling */
-    .delete-button {
-        background-color: #f44336; /* Red background */
-        color: white;
-        border: none;
-        padding: 8px 12px;
-        font-size: 14px;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-    }
-    
-    .delete-button:hover {
-        background-color: #d32f2f; /* Darker red on hover */
-    }
-    
-    
-            /* Responsive Styling */
-            @media (max-width: 768px) {
-                .navbar {
-                    flex-direction: column;
-                    gap: 10px;
-                }
-    
-                .navbar .nav-links {
-                    justify-content: center;
-                    gap: 15px;
-                }
-            }
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    color: #cc2121;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+/* Header Styling */
+.body h1 {
+    color: #c13434;
+    /* margin-bottom: 20px; */
+    font-size: 2.5rem;
+
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    width: 90%;
+    margin: auto;
+}
+
+.product-grid div {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    padding: 10px;
+    text-align: center;
+    position: relative;
+}
+
+.product-grid div:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.product-grid h2 {
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+}
+
+.product-grid p {
+    font-size: 0.9rem;
+    color: #666;
+    margin: 5px 0;
+}
+
+.product-grid img {
+    width: 100%;
+    height: 200px;
+    object-fit: contain;
+    background-color: #f4f4f4;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 10px;
+}
+
+.price {
+    color: #333;
+    font-weight: bold;
+}
+
+.old-price {
+    color: #888;
+    text-decoration: line-through;
+    font-size: 0.9rem;
+}
+
+.discount {
+    color: #4caf50;
+    font-weight: bold;
+    font-size: 0.9rem;
+}

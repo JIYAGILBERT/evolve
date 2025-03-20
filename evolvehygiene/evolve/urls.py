@@ -22,6 +22,7 @@ urlpatterns = [
      path('accounts/', include('django.contrib.auth.urls')),  # <-- Add this line!
       path('deletion/<int:id>',views.delete_g,name='deletion'),
    path('edit_g/<int:id>',views.edit_g,name='edit_g'),
+   path('search_result',views.search_result,name='search_result'),
      
 ] 
 if settings.DEBUG:

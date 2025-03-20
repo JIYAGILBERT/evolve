@@ -1,75 +1,138 @@
-        /* General Styling */
-        body.main {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            color: #333;
-            margin: 0;
-            padding: 0;
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            color: #2874f0;
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        /* Navigation Bar */
-        .navbar {
-            background-color:rgb(1, 18, 45);
-            padding: 10px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            color: white;
-        }
-
-        .navbar .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .navbar .nav-links a {
-            text-decoration: none;
-            color: white;
-            font-size: 16px;
-            padding: 8px 12px;
-            transition: background-color 0.3s;
-        }
-
-        .navbar .nav-links a:hover {
-            background-color: #1a5bb8;
-            border-radius: 5px;
-        }
-
-        .navbar button {
-            background-color: #ff5722;
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            font-size: 14px;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .navbar button:hover {
-            background-color: #e64a19;
-        }
-
-      /* Product Grid */
-.product-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Adjust the minimum width */
-    gap: 15px; /* Reduce the gap between items */
-    padding: 20px;
-    max-width: 800px; /* Set a maximum width for the entire grid */
-    margin: 0 auto; /* Center the grid within the page */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #0f0e0e;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+/* Navigation Bar */
+.nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(90deg, #f0f0f2, #2668db);
+    padding: 15px 40px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    z-index: 999;
+    font-family: 'Poppins', sans-serif;
+    transition: all 0.3s ease;
 }
 
+/* Logo Styling */
+.logo img {
+    height: 50px;
+    /* filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5)); */
+    transition: transform 0.3s ease-in-out;
+}
+
+.logo img:hover {
+    transform: scale(1.1);
+}
+
+/* Navigation Links */
+.left {
+    display: flex;
+    /* gap: 0px; */
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.left a {
+    text-decoration: none;
+    color: #fff;
+    padding: 8px 50px;
+    transition: 0.3s ease-in-out;
+    position: relative;
+    letter-spacing: 0.5px;
+}
+
+
+.hero {
+    height: 200px;
+    width: 100%;
+    
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    margin-bottom: 20px;
+}
+
+
+.overlay {
+    /* background: linear-gradient(to right, #9fddf3, #e7eaeb); */
+    padding: 30px;
+    border-radius: 10px;
+    width: 100%;
+    height: 100%;
+    
+    /* Centering Content */
+    display: flex;
+    justify-content: center; /* Horizontally Center */
+    align-items: center; /* Vertically Center */
+    text-align: center; /* Align text content */
+    flex-direction: column; /* Stack elements vertically */
+}
+
+.overlay h1 {
+    background: linear-gradient(to right, #2b61d7, #ff4e50); /* Adjust colors as needed */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 70px;
+    margin-bottom: 20px;
+}
+.overlay p {
+    background: linear-gradient(to right, #0a0909, #f83909); /* Adjust colors as needed */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 20px;
+}
+
+
+
+
+
+/* Header Styling */
+h1 {
+    color: #444;
+    margin-bottom: 20px;
+    font-size: 2.5rem;
+}
+      /* Product Grid */
+      .products {
+        text-align: center;
+        padding: 20px;
+        width: 100%;
+    }
+
+.products h1 {
+    font-size: 2.5rem;
+    color: #2b61d7;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* Product grid styling */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    padding: 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+/* Individual product card styling */
 .product-grid div {
     background: #ffffff;
     border: 1px solid #ddd;
@@ -78,56 +141,52 @@
     text-align: center;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s, box-shadow 0.3s;
-    width: 90%; /* Minimize the individual product card width */
-    margin: 0 auto; /* Center the product cards */
+    width: 90%;
+    margin: 0 auto;
 }
 
+.product-grid img {
+    max-width: 150px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
 
-        /* Image Styling */
-        .product-grid img {
-            max-width: 150px; /* Set a maximum width for the images */
-            height: 200px; /* Maintain a consistent height */
-            object-fit: cover; /* Crop the image if necessary to fit dimensions */
-            border-radius: 10px;
-            margin-bottom: 10px;
-        }
-        .product-grid span {
-            display: block;
-            font-size: 1rem;
-            margin: 5px 0;
-            color: #555;
-        }
+.product-grid span {
+    display: block;
+    font-size: 1rem;
+    margin: 5px 0;
+    color: #555;
+}
 
-        /* Edit Button Styling */
-.edit-button {
-    background-color: #4caf50; /* Green background */
-    color: white;
-    border: none;
+/* Button styling */
+.edit-button, .delete-button {
     padding: 8px 12px;
     font-size: 14px;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+}
+
+/* Edit button styling */
+.edit-button {
+    background-color: #4caf50;
+    color: white;
 }
 
 .edit-button:hover {
-    background-color: #388e3c; /* Darker green on hover */
+    background-color: #388e3c;
 }
 
-/* Delete Button Styling */
+/* Delete button styling */
 .delete-button {
-    background-color: #f44336; /* Red background */
+    background-color: #f44336;
     color: white;
-    border: none;
-    padding: 8px 12px;
-    font-size: 14px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
 }
 
 .delete-button:hover {
-    background-color: #d32f2f; /* Darker red on hover */
+    background-color: #d32f2f;
 }
 
 
@@ -141,5 +200,20 @@
             .navbar .nav-links {
                 justify-content: center;
                 gap: 15px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                flex-direction: column;
+                gap: 10px;
+            }
+        
+            .product-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+        
+            .products h1 {
+                font-size: 2rem;
             }
         }

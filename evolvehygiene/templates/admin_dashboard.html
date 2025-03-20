@@ -4,27 +4,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Admin Dashboard</title>
     <link rel="stylesheet" href="{% static 'css/admin_dashboard.css' %}">
-    <style>
- 
-        
-    </style>
 </head>
 <body class="main">
-    <div class="navbar">
+    <div class="nav">
         <div class="logo">
-            <h2 style="margin: 0; font-size: 1.5rem;">Shoes cart</h2>
+            <img src="{% static 'image/evolve-logo.png' %}" alt="Evolve Logo">
         </div>
-        <div class="nav-links">
-            <a href="{% url 'product_upload' %}">Upload Product</a>
-            <a href="{% url 'logoutuser' %}">
-                <button>Logout</button>
-            </a>
+        <div class="left">
+            <div class="nav-links">
+                <a href="{% url 'product_upload' %}">Upload Product</a>
+                <a href="{% url 'logoutuser' %}">Logout</a>
+                <a href="#">Add category</a>
+            </div>
         </div>
     </div>
-
-    <h1>Welcome</h1>
+    <section class="hero">
+        <div class="overlay">
+            <h1>EVOLVE HYGIENE STAY EVOLVED</h1>
+            <!-- <img src="{% static 'image/Evolve Hygiene-building.png' %}" alt=""> -->
+            <p>This is a Admin Page</p>
+            <br>
+           
+            
+        </div>
+        <br>
+        <h1>Our products uploaded </h1>
+   
     <div class="product-grid">
         {% for i in gallery_items %}
         <div>
@@ -38,19 +45,13 @@
     
             <!-- Only show buttons if the product has a valid ID -->
             {% if i.id %}
-                <a href="{% url 'deletion' i.id %}">
-                    <button class="delete-button">Delete</button>
-                </a>
-                <a href="{% url 'edit_g' i.id %}">
-                    <button class="edit-button">Edit</button>
-                </a>
+                <a href="{% url 'deletion' i.id %}"><button class="delete-button">Delete</button></a>
+                <a href="{% url 'edit_g' i.id %}"><button class="edit-button">Edit</button></a>
             {% else %}
                 <p class="error-msg">Error: Product ID missing!</p>
             {% endif %}
         </div>
         {% endfor %}
     </div>
-    
-
 </body>
 </html>
