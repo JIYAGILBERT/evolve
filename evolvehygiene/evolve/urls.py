@@ -19,11 +19,18 @@ urlpatterns = [
     path('product_upload',views.product_upload, name='product_upload'),
     path('contact_us',views.contact_us, name='contact_us'),
     path('thank_you_page',views.thank_you_page, name='thank_you_page'),
-     path('accounts/', include('django.contrib.auth.urls')),  # <-- Add this line!
-      path('deletion/<int:id>',views.delete_g,name='deletion'),
-   path('edit_g/<int:id>',views.edit_g,name='edit_g'),
-   path('search_result',views.search_result,name='search_result'),
-     
+    path('accounts/', include('django.contrib.auth.urls')),  # <-- Add this line!
+    path('deletion/<int:id>',views.delete_g,name='deletion'),
+    path('edit_g/<int:id>',views.edit_g,name='edit_g'),
+    path('search_result',views.search_result,name='search_result'),
+#   path('samp',views.samp,name='samp'),
+    path('users/', views.admin_users, name='admin_users')
+    # path('cart/increment/<int:id>/', views.increment_cart, name='increment_cart'),
+
+    # path('cart/decrement/<int:id>/', views.decrement_cart, name='decrement_cart'),
+    # path('dele/<int:id>/', views.delete_cart, name='dele'),
+    # path('add_to_cart/<int:id>/', views.add_to_cart, name='add_to_cart'),
+    # path('cart/', views.cart_view, name='cart_view'),
 ] 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

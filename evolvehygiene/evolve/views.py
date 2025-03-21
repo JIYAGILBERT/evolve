@@ -14,6 +14,9 @@ from .models import Gallery
 from.models import *
 from . import views
 import random
+from django.contrib.auth import authenticate, login
+from django.shortcuts import render, redirect
+from django.contrib import messages
 
 
 
@@ -21,20 +24,51 @@ import random
 
 
 def landing_page(request):
-    return render(request, 'landing_page.html')
+    # if not request.user.is_authenticated:
+    #     return redirect('userlogin')
+    return render(request, "landing_page.html")
+
+
+from django.contrib.auth import authenticate, login
+from django.contrib import messages
+
+def userlogin(request):
+    if request.user.is_authenticated:
+        return redirect('landing_page')
+
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        if not username or not password:
+            messages.error(request, "Please fill in both fields.")
+            return redirect('userlogin')
+
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)  # ✅ This ensures the user is logged in
+            request.session['username'] = username  # ✅ Store username in session
+            if user.is_superuser:
+                return redirect('admin_dashboard')
+            return redirect('landing_page')
+        else:
+            messages.error(request, "Invalid username or password.")
+
+    return render(request, 'userlogin.html')
+
 
 
 
 
 def register(request):
-    if request.method == 'POST':  # Check if the request method is POST
+    if request.method == 'POST':
         email = request.POST.get('email')
         username = request.POST.get('username')
         password = request.POST.get('password')
         confirmpassword = request.POST.get('Confirmpassword')
-        print(email, username, password, confirmpassword)
 
-        # Validate form fields
+        # Validation
         if not username or not email or not password or not confirmpassword:
             messages.error(request, 'All fields are required.')
         elif confirmpassword != password:
@@ -44,46 +78,16 @@ def register(request):
         elif User.objects.filter(username=username).exists():
             messages.error(request, "Username already exists.")
         else:
-            # Create the user without passing 'user=request.user'
             user = User.objects.create_user(username=username, email=email, password=password)
             user.save()
             messages.success(request, "Account created successfully!")
-            return redirect('userlogin')  # Redirect to login page
+            return redirect('userlogin')
 
     return render(request, "register.html")
 
 
-
-from django.contrib.auth import authenticate, login
-from django.shortcuts import render, redirect
-from django.contrib import messages
-
-def userlogin(request):
-    # If user already logged in, redirect to home
-    if request.user.is_authenticated:
-        return redirect('user_home')
-
-    # Handle login form submission
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = authenticate(request, username=username, password=password)
-
-        if user is not None:
-            login(request, user)  # Start session automatically
-            # Redirect based on user type
-            if user.is_superuser:
-                return redirect('admin_dashboard')
-            return redirect('user_home')
-        else:
-            messages.error(request, "Invalid credentials.")
-
-    return render(request, 'userlogin.html')
-
-
 def logoutuser(request):
     logout(request)
-    # request.session.flush()
     return redirect('userlogin')
 
 def user_home(request):
@@ -105,7 +109,7 @@ def our_product(request):
 
 # @login_required(login_url='userlogin')  # Redirect to login if not logged in
 def contact_us(request):
-    if 'username' in request.session:
+    if request.session.get('username'):  # ✅ Ensure session exists
         if request.method == "POST":
             form = ContactForm(request.POST)
             if form.is_valid():
@@ -119,14 +123,16 @@ def contact_us(request):
                     recipient_list=["jiyagilbert1@gmail.com"],
                     fail_silently=False,
                 )
-                return redirect('thank_you_page')  # Redirect to 'thank you' page
+                return redirect('thank_you_page')
 
         else:
             form = ContactForm()
 
-        return render(request, 'contact_us.html', {'form': form})
+        return render(request, 'contact_us.html', {'form': form})  # ✅ Pass form to template
+
     else:
-        return redirect('userlogin')    
+        return redirect('userlogin')
+
 
 
 def thank_you_page(request):
@@ -211,6 +217,76 @@ def search_result(request):
     return render(request, 'search_results.html', {'results': results, 'query': query}) 
 
 
+# def samp(request):
+#     return render(request, 'contact_us.html')  
+def admin_users(request):
+    if not request.user.is_authenticated or not request.user.is_superuser:
+        # Redirect non-admin users or unauthenticated users
+        return redirect('loginuser')  
+    users = User.objects.all()  # Fetch all users
+    return render(request, 'admin_users.html', {'users':users})  
+
+
+@login_required(login_url='userlogin')
+def add_to_cart(request, id):
+    if 'username' in request.session:
+        try:
+            product = Gallery.objects.get(id=id)
+        except Gallery.DoesNotExist:
+        
+            return redirect('product_not_found')  
+    
+        cart_item, created = Cart.objects.get_or_create(
+            user=request.user,
+            product=product,
+        
+        )
+        if not created:
+            if cart_item.product.quantity > cart_item.quantity:
+                cart_item.quantity += 1
+            else:
+                messages.error(request, "out of stock.")
+                return redirect('cart_view')
+        else:
+            cart_item.quantity = 1
+            cart_item.save()
+            return redirect('cart_view')
+
+
+@login_required
+def increment_cart(request, id):
+    cart_item = get_object_or_404(Cart, pk=id, user=request.user)
+    if cart_item.product.quantity > cart_item.quantity:
+        cart_item.quantity += 1
+        cart_item.save()
+    else:
+        messages.error(request, "Not enough stock available.")
+
+    return redirect('cart_view')
+
+@login_required
+def decrement_cart(request, id):
+    cart_item = get_object_or_404(Cart, pk=id, user=request.user)
+    if cart_item.quantity > 1:
+        cart_item.quantity -= 1
+        cart_item.save()
+    else:
+        cart_item.delete()
+    return redirect('cart_view')
+
+
+@login_required
+def cart_view(request):
+    cart_items = Cart.objects.filter(user=request.user)
+    total_price = sum(item.product.price * item.quantity for item in cart_items)
+    cart_item_count = cart_items.count()
+    return render(request, 'cart.html', {'cart_items': cart_items, 'total_price': total_price, 'cart_item_count': cart_item_count})
+
+@login_required
+def delete_cart(request, id):
+    cart_item = get_object_or_404(Cart, pk=id, user=request.user)
+    cart_item.delete()
+    return redirect('cart_view')
 
 
 

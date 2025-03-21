@@ -9,29 +9,38 @@
     <title>About evolve</title>
 </head>
 <body>
-    <!-- Navigation Bar -->
     <div class="nav">
         <div class="logo">
             <img src="{% static 'image/evolve-logo.png' %}" alt="Evolve Logo">
         </div>
         <div class="left">
-            <a href="{% url 'user_home' %}">Home</a>
+            <a href="{% url 'landing_page' %}">Home</a>
             <a href="{% url 'about_us' %}">About Us</a>
             <a href="{% url 'our_product' %}">Our Products</a>
+             <a href="{% url 'contact_us' %}">contact</a>
         </div>
         <div class="right">
-            <!-- <i class="bi bi-search"></i> -->
-            <input type="text" placeholder="Search...">
+            <i class="bi bi-search"><input type="text" placeholder="Search..."></i>
         </div>
     </div>
 
     <!-- Header -->
     <header>
         <h1>Contact Us</h1>
+        <p>Evolve Hygiene provides innovative, high-quality cleaning and hygiene solutions for homes, businesses, and industries.  
+            We prioritize sustainability and performance to create safer, healthier environments.  
+            With a customer-first approach, we deliver reliable products and expert support tailored to your needs.
+        </p>
     </header>
+    
 
     <!-- Contact Information Section -->
     <section class="contact-info-1">
+        <div class="info-box">
+            <i class="bi bi-envelope-at-fill"></i>
+            <h3>Email</h3>
+            <p>els@evolveglobal.com</p>
+        </div>
         <div class="info-box">
             <i class="bi bi-geo-alt-fill"></i>
             <h3>Address</h3>
@@ -42,25 +51,24 @@
             <h3>Phone</h3>
             <p>+91 9072668921</p>
         </div>
-        <div class="info-box">
-            <i class="bi bi-envelope-at-fill"></i>
-            <h3>Email</h3>
-            <p>els@evolveglobal.com</p>
-        </div>
+       
     </section>
 
     <!-- Contact Form Section -->
     <div class="container">
         <div class="contact-info">
-            <h2>Contact Business Solutions Sales</h2>
-            <p>Already a customer or need help with a billing issue? <a href="#">Contact Support</a></p>
-            <h4>North America Sales</h4>
-            <p>📞 +1800 708 8749</p>
-            <h4>Europe / Asia / Australia / Pacific Sales</h4>
-            <p>Fill out your details to be contacted.</p>
+            <h2>Contact Evolve Hygiene Sales Team</h2>
+            <p>Already a customer or need help with an order? <a href="#">+91 9072668920</a></p>
+            
+            <h4>Evolve Sales</h4>
+            <p>📞 +91 9995993005</p>
+            
+            <h4>International Sales</h4>
+            <p>For global inquiries, fill out your details to get in touch with our team.→ </p>
+            
             <div class="social-icons">
-                <a href="#"><i class="bi bi-facebook"></i></a>
-                <a href="#"><i class="bi bi-instagram"></i></a>
+                <a href="facebook.com/evolvehygieneofficial"><i class="bi bi-facebook"></i></a>
+                <a href="instagram.com/evolvehygiene"><i class="bi bi-instagram"></i></a>
             </div>
         </div>
         <div class="form-container">
@@ -83,7 +91,11 @@
 
     <!-- Google Maps Embed -->
     <div class="map-container mt-4">
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3929.239046402409!2d76.3128187147939!3d9.905215392918975" loading="lazy" width="100%" height="450" style="border:0;"></iframe>
+        <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d1965.169996670417!2d76.319173!3d9.905615!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b0873d100021925%3A0x5b3ec9bc1dc08edf!2sEvolve%20Hygiene!5e0!3m2!1sen!2sus!4v1742574278970!5m2!1sen!2sus" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+
+    <div>
+        <h1>"Thank you for choosing Evolve Hygiene — where cleanliness meets innovation. Together, let’s create healthier, safer spaces for a better tomorrow."</h1>
     </div>
 
     <!-- Footer -->
