@@ -30,12 +30,12 @@
             <i class="bi bi-person-square"></i>
             <div class="dropdown">
                 {% if request.user.is_authenticated %}
-                    <a href="#">Profile</a>
-                    <a href="#">Settings</a>
-                    <div><a href="{% url 'logoutuser' %}"><button>Logout</button></a></div>
+                    <a href="#">PROFILE</a>
+                    <a href="#">SETTINGS</a>
+                    <div><a href="{% url 'logoutuser' %}">LOGOUT</a></div>
                 {% else %}
                     <a href="{% url 'register' %}">REGISTER</a>
-                    <div><a href="{% url 'userlogin' %}"><button>Login</button></a></div>
+                    <div><a href="{% url 'userlogin' %}">LOGIN</a></div>
                 {% endif %}
             </div>
         </div>
@@ -63,7 +63,8 @@
         <div class="category">
             <img src="{% static 'image/hotel-operational.jpg' %}" alt="Hotel Operational Products">
             <div class="info-hed">
-                <a href="#"><h3>Hotel Operational Products</h3></a>       
+                <a href="{% url 'dispenser' %}">
+                <h3>Hotel Operational Products</h3></a>       
             </div>               
         </div>
         
@@ -84,7 +85,7 @@
         <div class="category">
             <img src="{% static 'image/janitorial-tools.jpg' %}" alt="Home Improvement Cleaning Products">
             <div class="info-hed">
-                <a href="#"><h3>Home Cleaning Products</h3></a>       
+                <a href="{% url 'cleaning_products' %}"><h3>Home Cleaning Products</h3></a>       
             </div>               
         </div>
     
@@ -92,7 +93,7 @@
         <div class="category">
             <img src="{% static 'image/dispensers.jpg' %}" alt="Dispensers">
             <div class="info-hed">
-                <a href="#"><h3>Dispensers</h3></a>       
+                <a href="{% url 'dispenser' %}"><h3>Dispensers</h3></a>       
             </div>               
         </div>
     
@@ -188,60 +189,53 @@
     
    
     
-
-<!-- Footer -->
-    <footer class="footer">
-        <div class="footer-container">
-            
-            <!-- Branding Section -->
-            <div class="footer-branding">
-                <img src="{% static 'image/evolve-logo.png' %}" alt="Chempakam Logo">  
-                <p>© All rights reserved by Evolve Hygiene, Cochin, India.</p>
-                <div class="social-icons">
-                    <a href="#"><i class="bi bi-facebook"></i></a>
-                    <a href="#"><i class="bi bi-twitter"></i></a>
-                    <a href="#"><i class="bi bi-linkedin"></i></i></a>
-                    <a href="#"><i class="bi bi-instagram"></i></a>
-                    <!-- <a href="#"><i class="fab fa-pinterest"></i></a> -->
-                </div>
+ <!-- Footer -->
+ <footer class="footer">
+    <div class="footer-container">
+        <div class="footer-branding">
+            <img src="{% static 'image/evolve-logo.png' %}" alt="Evolve Logo">  
+            <p>© All rights reserved by Evolve Hygiene, Cochin, India.</p>
+            <div class="social-icons">
+                <a href="#"><i class="bi bi-facebook"></i></a>
+                <a href="#"><i class="bi bi-twitter"></i></a>
+                <a href="#"><i class="bi bi-linkedin"></i></a>
+                <a href="#"><i class="bi bi-instagram"></i></a>
             </div>
-
-            <!-- Solutions Section -->
-            <div class="footer-section">
-                <h3>SOLUTIONS</h3>
-                <ul>
-                    <li><a href="#">My Account</a></li>
-                    <li><a href="#">Track Your Order</a></li>
-                    <li><a href="#">Order History</a></li>
-                    <li><a href="#">Payment Methods</a></li>
-                    <li><a href="#">Privacy Policy</a></li>
-                </ul>
-            </div>
-
-            <!-- About Us Section -->
-            <div class="footer-section">
-                <h3>ABOUT US</h3>
-                <ul>
-                    <li><a href="{% url 'about_us' %}">About Us</a></li>
-                    <li><a href="#">Terms & Conditions</a></li>
-                    <li><a href="#">Privacy Policy</a></li>
-                    <li><a href="#">Return Policy</a></li>
-                    <li><a href="#">Site Map</a></li>
-                </ul>
-            </div>
-
-            <!-- Contact Us Section -->
-            <div class="footer-section">
-                <h3>CONTACT US</h3>
-                <ul>
-                    <li><i class="fas fa-map-marker-alt"></i> Phase-1, Hygiene Road, Madavana, Panangad, Ernakulam, Kerala 682506</li>
-                    <li><i class="fas fa-phone"></i> 090726 68921</li>
-                    <li><i class="fas fa-clock"></i> Mon - Sat / 9:30AM - 6:00PM</li>
-                </ul>
-            </div>
-
         </div>
-    </footer>
+
+        <!-- Footer Sections -->
+        <div class="footer-section">
+            <h3>Solutions</h3>
+            <ul>
+                <li><a href="#">My Account</a></li>
+                <li><a href="#">Track Your Order</a></li>
+                <li><a href="#">Order History</a></li>
+                <li><a href="#">Payment Methods</a></li>
+                <li><a href="#">Privacy Policy</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-section">
+            <h3>About Us</h3>
+            <ul>
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Terms & Conditions</a></li>
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Return Policy</a></li>
+                <li><a href="#">Site Map</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-section">
+            <h3>Contact Us</h3>
+            <ul>
+                <li><i class="bi bi-geo-alt-fill"></i> Phase-1, Hygiene Road, Panangad, Ernakulam, Kerala</li>
+                <li><i class="bi bi-telephone-fill"></i> 090726 68921</li>
+                <li><i class="bi bi-clock-fill"></i> Mon - Sat / 9:30AM - 6:00PM</li>
+            </ul>
+        </div>
+    </div>
+</footer>
 
 </body>
 </html>

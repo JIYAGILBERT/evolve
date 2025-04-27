@@ -24,13 +24,10 @@ urlpatterns = [
     path('edit_g/<int:id>',views.edit_g,name='edit_g'),
     path('search_result',views.search_result,name='search_result'),
 #   path('samp',views.samp,name='samp'),
-    path('users/', views.admin_users, name='admin_users')
-    # path('cart/increment/<int:id>/', views.increment_cart, name='increment_cart'),
-
-    # path('cart/decrement/<int:id>/', views.decrement_cart, name='decrement_cart'),
-    # path('dele/<int:id>/', views.delete_cart, name='dele'),
-    # path('add_to_cart/<int:id>/', views.add_to_cart, name='add_to_cart'),
-    # path('cart/', views.cart_view, name='cart_view'),
+    path('users/', views.admin_users, name='admin_users'),
+    path('dispenser',views.dispenser,name='dispenser'),
+    path('cleaning_products',views.cleaning_products,name='cleaning_products'),
+    # path('hoteloperational_products',views.hoteloperational_products,name='hoteloperational_products'),
 ] 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,110 +1,118 @@
-/* General Page Styling */
+/* login.css */
+
 body {
-    font-family: 'Poppins', sans-serif;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background: linear-gradient(135deg, #c09afe, #94b4f8);
-  }
-  
-  /* Enlarged Login Box */
-  .login-box {
-    background: rgba(0, 0, 0, 0.85);
-    padding: 50px;
-    border-radius: 12px;
-    box-shadow: 0 0 20px rgba(121, 188, 255, 0.5);
-    text-align: center;
-    width: 450px; /* Increased width */
-    height: 550px; /* Increased height */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-  
-  /* Heading */
-  h2 {
-    color: #d7c4ef;
-    font-size: 26px;
-    margin-bottom: 25px;
-    text-transform: uppercase;
-  }
-  
-  /* User Input Fields */
-  .user-box {
-    position: relative;
-    margin-bottom: 40px;
-  }
-  
-  .user-box input {
-    width: 100%;
-    padding: 14px;
-    font-size: 18px;
-    color: #ffffff;
-    background: transparent;
-    border: none;
-    border-bottom: 2px solid #d7c4ef;
-    outline: none;
-  }
-  
-  .user-box label {
-    position: absolute;
-    top: 12px;
-    left: 10px;
-    color: rgba(255, 255, 255, 0.6);
-    transition: 0.3s;
-    font-size: 18px;
-  }
-  
-  .user-box input:focus ~ label,
-  .user-box input:valid ~ label {
-    top: -18px;
-    left: 5px;
-    font-size: 14px;
-    color: #d7c4ef;
-  }
-  
-  /* Enlarged Button */
-  button {
-    width: 100%;
-    padding: 15px;
-    border: none;
-    background: #d7c4ef;
-    color: black;
-    font-size: 18px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: 0.3s;
-    font-weight: bold;
-  }
-  
-  button:hover {
-    background: #d7c4ef;
-    transform: scale(1.05);
-  }
-  
-  /* Links */
-  .links {
-    margin-top: 20px;
-  }
-  
-  .links p {
-    color: #ffffff;
-    font-size: 16px;
-  }
-  
-  .links a {
-    color: #d7c4ef;
-    text-decoration: none;
-    font-size: 16px;
-    transition: 0.3s;
-    font-weight: bold;
-  }
-  
-  .links a:hover {
-    text-decoration: underline;
-    color: #d7c4ef;
-  }
-  
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(#141e30, #243b55);
+  height: 100vh;
+  font-family: 'Poppins', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-box {
+  position: relative;
+  width: 500px;
+  padding: 40px;
+  background: rgba(0, 0, 0, 0.7);
+  box-shadow: 0 15px 25px rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+  color: #fff;
+  text-align: center;
+}
+
+.login-box h2 {
+  margin: 0 0 30px;
+  padding: 0;
+  font-size: 28px;
+}
+
+.user-box {
+  position: relative;
+  margin-bottom: 30px;
+}
+
+.user-box input {
+  width: 100%;
+  padding: 10px 0;
+  font-size: 16px;
+  color: #fff;
+  margin-bottom: 20px;
+  border: none;
+  border-bottom: 1px solid #fff;
+  background: transparent;
+  outline: none;
+}
+
+.user-box label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 10px 0;
+  font-size: 16px;
+  color: #aaa;
+  pointer-events: none;
+  transition: 0.5s;
+}
+
+.user-box input:focus ~ label,
+.user-box input:valid ~ label {
+  top: -20px;
+  left: 0;
+  color: #03e9f4;
+  font-size: 12px;
+}
+
+button[type="submit"] {
+  background: none;
+  border: none;
+  color: #03e9f4;
+  font-size: 18px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  transition: 0.5s;
+  margin-top: 20px;
+}
+
+button[type="submit"]:hover {
+  color: #fff;
+  background: #03e9f4;
+  border-radius: 5px;
+  padding: 10px 20px;
+}
+
+.links {
+  margin-top: 20px;
+}
+
+.links a {
+  color: #03e9f4;
+  text-decoration: none;
+  font-size: 14px;
+  margin: 0 10px;
+  transition: 0.3s;
+  margin-right: -1px;
+}
+
+.links a:hover {
+  text-decoration: underline;
+}
+
+
+.f-links {
+  margin-top: 20px;
+}
+
+.f-links a {
+  color: #f0f5f5;
+  text-decoration: none;
+  font-size: 14px;
+  margin: 0 10px;
+  transition: 0.3s;
+}
+
+.f-links a:hover {
+  text-decoration: underline;
+}
