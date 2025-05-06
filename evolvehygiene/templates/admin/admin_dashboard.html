@@ -17,7 +17,8 @@
                 <a href="{% url 'product_upload' %}">Upload Product</a>
                 <a href="{% url 'logoutuser' %}">Logout</a>3
                 <a href="{% url 'admin_users' %}">View Registered Users</a>
-                <a href="#">Add category</a>
+                <a href="{% url 'create_category' %}">Add category</a>
+                <a href="{% url 'create_subcategory' %}">Add subcategory</a>
             </div>
         </div>
     </div>
@@ -46,7 +47,13 @@
     
             <!-- Only show buttons if the product has a valid ID -->
             {% if i.id %}
-                <a href="{% url 'deletion' i.id %}"><button class="delete-button">Delete</button></a>
+            {% for product in products %}
+            <!-- Your product display -->
+            <a href="{% url 'deletion' product.id %}" class="delete-btn" 
+               onclick="return confirm('Are you sure you want to delete this product?');">
+               Delete
+            </a>
+             {% endfor %}
                 <a href="{% url 'edit_g' i.id %}"><button class="edit-button">Edit</button></a>
             {% else %}
                 <p class="error-msg">Error: Product ID missing!</p>

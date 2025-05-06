@@ -1,81 +1,149 @@
-{%load static%} 
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>{% if data1 %}Edit Product{% else %}Upload New Product{% endif %}</title>
     <link rel="stylesheet" href="{% static 'css/product_upload.css' %}">
-        
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    <h1>Upload New Products </h1>
+    <div class="container">
+        <h1>{% if data1 %}Edit Product{% else %}Upload New Product{% endif %}</h1>
 
-    {% if data1 %}
-     <form action="{% url 'edit_g' data1.id %}" method="post" enctype="multipart/form-data">
-    
-        {% csrf_token %}
-     <input type="file" name="image" id="image" value="{{data1.myimage}}" required>
-    
-     name
-     <input type="text" name="name" class="ww" value="{{data1.name}}">
-     
-     price
-     <input type="text" name="price" class="www" value="{{data1.price}}">
-    
-     <!-- quantity
-     <input type="text" name="course" class="ww" value="{{data1.quantity}}"> -->
-     
-     model
-     <input type="address" name="model" class="ww" value="{{data1.model}}">
-     
-     <!-- offers
-     <input type="address" name="offers" class="ww" value="{{data1.offers}}">
-      -->
-     <!-- <input type="submit" value="submit" class="cc"><br><br> -->
-     <button type="submit" class="cc">submit</button>
-    
-    </form>
+        <form action="{% if data1 %}{% url 'edit_g' data1.id %}{% else %}{% url 'product_upload' %}{% endif %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
 
-    {% else %}
-    <form action="{% url 'product_upload' %}" method="post" enctype="multipart/form-data">
-    
-    {% csrf_token %}
-     
-    <label for="image">Upload Image:</label>
-    <input type="file" name="image" id="image" required>
-     
-    company
-     <input type="text" name="name" class="ww">
-     
-     price
-     <input type="text" name=" price" class="www">
-     
-     <!-- quantity
-     <input type="text" name="quantity" class="ww"><br><br> -->
-     
-     model
-     <input type="address" name="model" class="ww">
-     
-     <!-- offers
-     <input type="address" name="offers" class="ww"> -->
-     
-     <button type="submit">Submit</button>
-     
-     {% endif %}
+            <!-- Image Upload -->
+            <div class="form-group">
+                <label for="image">Product Image:</label>
+                <input type="file" name="image" id="image" {% if not data1 %}required{% endif %}>
+                {% if data1 and data1.image %}
+                    <img src="{{ data1.image.url }}" alt="Current product image" class="current-image">
+                    <p>Current image</p>
+                {% endif %}
+            </div>
 
- </form>
- <div>
-     {% for i in gallery_images %}
-     {% if i.feedimage %}
-     {% else %}
-         <p>No image for this gallery item</p>
-     {% endif %}
- {% empty %}
-     <p>No images uploaded yet.</p>
- {% endfor %}
- </div>
- <a href="{% url 'admin_dashboard' %}">Home</a>
-    <!-- <a href="{% url 'logout' %}">logout</a> -->
- </body>
+            <!-- Product Name -->
+            <div class="form-group">
+                <label for="name">Product Name:</label>
+                <input type="text" name="name" id="name" value="{{ data1.name|default:'' }}" required>
+            </div>
+
+            <!-- Price Fields -->
+            <div class="price-group">
+                <div class="form-group">
+                    <label for="price">Price:</label>
+                    <input type="number" name="price" id="price" step="0.01" value="{{ data1.price|default:'' }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="offer_price">Offer Price (optional):</label>
+                    <input type="number" name="offer_price" id="offer_price" step="0.01" value="{{ data1.offer_price|default:'' }}">
+                </div>
+            </div>
+
+            <!-- Weight -->
+            <div class="form-group">
+                <label for="weight">Weight (kg):</label>
+                <input type="number" name="weight" id="weight" step="0.01" value="{{ data1.weight|default:'' }}" required>
+            </div>
+
+            <!-- Details -->
+            <div class="form-group">
+                <label for="details">Product Details:</label>
+                <textarea name="details" id="details" required>{{ data1.details|default:'' }}</textarea>
+            </div>
+
+            <!-- Rating -->
+            <div class="form-group">
+                <label for="rating">Rating (0-5):</label>
+                <input type="number" name="rating" id="rating" min="0" max="5" step="0.1" value="{{ data1.rating|default:'' }}">
+            </div>
+
+            <!-- Category Selection -->
+            <div class="form-group">
+                <label for="category-select">Category:</label>
+                <select name="category" id="category-select" required>
+                    <option value="">Select Category</option>
+                    {% for cat in categories %}
+                        <option value="{{ cat.id }}" 
+                            {% if data1 and data1.category.id == cat.id %}selected{% endif %}>
+                            {{ cat.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- SubCategory Selection -->
+            <div class="form-group">
+                <label for="subcategory-select">SubCategory:</label>
+                <select name="subcategory" id="subcategory-select" required>
+                    <option value="">Select SubCategory</option>
+                    {% if subcategories %}
+                        {% for sub in subcategories %}
+                            <option value="{{ sub.id }}" 
+                                {% if data1 and data1.subcategory.id == sub.id %}selected{% endif %}>
+                                {{ sub.name }}
+                            </option>
+                        {% endfor %}
+                    {% endif %}
+                </select>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="submit-btn">{% if data1 %}Update Product{% else %}Upload Product{% endif %}</button>
+                <a href="{% url 'admin_dashboard' %}" class="cancel-btn">Cancel</a>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            // Function to load subcategories based on selected category
+            function loadSubcategories(categoryId, selectedSubId = null) {
+                if (categoryId) {
+                    $.ajax({
+                        url: '/get_subcategories/',
+                        data: {
+                            'category_id': categoryId
+                        },
+                        success: function(data) {
+                            $('#subcategory-select').empty();
+                            $('#subcategory-select').append('<option value="">Select SubCategory</option>');
+                            $.each(data.subcategories, function(key, value) {
+                                let isSelected = (selectedSubId && value.id == selectedSubId) ? 'selected' : '';
+                                $('#subcategory-select').append(
+                                    `<option value="${value.id}" ${isSelected}>${value.name}</option>`
+                                );
+                            });
+                        },
+                        error: function() {
+                            console.error('Error loading subcategories');
+                        }
+                    });
+                } else {
+                    $('#subcategory-select').empty().append('<option value="">Select SubCategory</option>');
+                }
+            }
+
+            // Handle category change
+            $('#category-select').change(function() {
+                var categoryId = $(this).val();
+                loadSubcategories(categoryId);
+            });
+
+            // If editing, ensure proper subcategories are loaded
+            {% if data1 %}
+                // Trigger change if category is already selected
+                if ($('#category-select').val()) {
+                    loadSubcategories(
+                        $('#category-select').val(), 
+                        '{{ data1.subcategory.id|default:"" }}'
+                    );
+                }
+            {% endif %}
+        });
+    </script>
+</body>
 </html>

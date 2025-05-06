@@ -17,6 +17,9 @@ import random
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.http import JsonResponse
+from django.shortcuts import render, redirect
+from .models import Category
 
 
 
@@ -45,7 +48,7 @@ def userlogin(request):
             login(request, user)  # ✅ This ensures the user is logged in
             request.session['username'] = username  # ✅ Store username in session
             if user.is_superuser:
-                return redirect('user/admin_dashboard')
+                return redirect('admin_dashboard')
             return redirect('landing_page')
         else:
             messages.error(request, "Invalid username or password.")
@@ -83,7 +86,8 @@ def register(request):
 
 def logoutuser(request):
     logout(request)
-    return redirect('user/userlogin')
+    request.session.flush()
+    return redirect('userlogin')
 
 def user_home(request):
     return render(request, 'user/user_home.html')
@@ -136,33 +140,46 @@ def thank_you_page(request):
 
     
 def product_upload(request):
+    categories = Category.objects.all()
+
     if request.method == 'POST':
-        # Fetch form data properly
-        name = request.POST.get("name")
-        price = request.POST.get("price")
-        # quantity = request.POST.get("quantity")
-        model = request.POST.get("model")
-        myimage = request.FILES.get('image')  # Safer way to get the file
+        name = request.POST.get('name')
+        image = request.FILES.get('image')
+        price = request.POST.get('price')
+        offer_price = request.POST.get('offer_price')
+        weight = request.POST.get('weight')
+        details = request.POST.get('details')
+        rating = request.POST.get('rating')
+        category_id = request.POST.get('category')
+        subcategory_id = request.POST.get('subcategory')
 
-        # Optional: Basic error handling
-        if not name or not price or not model or not myimage:
-            return render(request, "/admin/product_upload.html", {"error": "All fields are required!"})
+        # Validation (you can add more)
+        if not all([name, image, price, weight, details, category_id, subcategory_id]):
+            messages.error(request, "Please fill in all required fields.")
+            return render(request, 'admin/product_upload.html', {'categories': categories})
 
-        # Save to the database
-        obj = Gallery.objects.create(
-            name=name,
-            price=price,
-            model=model,
-            # quantity=quantity,
-            feedimage=myimage
-        )
-        obj.save()
+        try:
+            category = Category.objects.get(id=category_id)
+            subcategory = SubCategory.objects.get(id=subcategory_id)
 
-        return redirect('admin/admin_dashboard')
+            product = Product.objects.create(
+                name=name,
+                image=image,
+                price=price,
+                offer_price=offer_price if offer_price else None,
+                weight=weight,
+                details=details,
+                rating=rating if rating else None,
+                category=category,
+                subcategory=subcategory,
+            )
+            messages.success(request, "Product uploaded successfully.")
+            return redirect('product_upload')  # or redirect to a product list page
+        except Exception as e:
+            messages.error(request, f"Error: {e}")
+            return render(request, 'product_upload.html', {'categories': categories})
 
-    # Fetch images for display
-    gallery_images = Gallery.objects.all()
-    return render(request, "admin/product_upload.html", {"gallery_images": gallery_images})
+    return render(request, 'admin/product_upload.html', {'categories': categories})
 
 
 def admin_dashboard(request):
@@ -236,4 +253,75 @@ def cleaning_products(request):
 
 
 
+def create_category(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        if Category.objects.filter(name=name).exists():
+            return render(request, 'admin/create_category.html', {
+                'error': 'Category with this name already exists.'
+            })
+        try:
+            Category.objects.create(name=name)
+            return redirect('category_list')
+        except IntegrityError:
+            return render(request, 'create_category.html', {
+                'error': 'An error occurred while creating the category.'
+            })
+    return render(request, 'admin/create_category.html')
+
+def create_subcategory(request):
+    if request.method == 'POST':
+        category_id = request.POST.get('category')
+        name = request.POST.get('name')
+        category = Category.objects.get(id=category_id)
+        SubCategory.objects.create(category=category, name=name)
+        return redirect('subcategory_list')
+    
+    categories = Category.objects.all()
+    return render(request, 'create_subcategory.html', {'categories': categories})
+
+def get_subcategories(request):
+    category_id = request.GET.get('category_id')
+    subcategories = SubCategory.objects.filter(category_id=category_id).values('id', 'name')
+    return JsonResponse({'subcategories': list(subcategories)})
+
+def category_list(request):
+    categories = Category.objects.all()
+    return render(request, 'admin/category_list.html', {'categories': categories})
+
+
+
+
+
+
+
+def create_subcategory(request):
+    categories = Category.objects.all()
+
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        category_id = request.POST.get('category')
+
+        if not name or not category_id:
+            messages.error(request, "Both fields are required.")
+        else:
+            category = Category.objects.get(id=category_id)
+            # Check if subcategory already exists
+            if SubCategory.objects.filter(name=name, category=category).exists():
+                messages.error(request, "This subcategory already exists for the selected category.")
+            else:
+                SubCategory.objects.create(name=name, category=category)
+                messages.success(request, "Subcategory created successfully.")
+                return redirect('create_subcategory')
+
+    return render(request, 'admin/create_subcategory.html', {'categories': categories})
+
+
+
+
+
+def get_subcategories(request):
+    category_id = request.GET.get('category_id')
+    subcategories = SubCategory.objects.filter(category_id=category_id).values('id', 'name')
+    return JsonResponse({'subcategories': list(subcategories)})
 

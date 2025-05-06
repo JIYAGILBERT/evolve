@@ -1,0 +1,18 @@
+<!-- category_list.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Category List</title>
+</head>
+<body>
+    <h1>Categories</h1>
+    <ul>
+        {% for category in categories %}
+            <li>{{ category.name }}</li>
+        {% empty %}
+            <li>No categories found.</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'create_category' %}">Create New Category</a>
+</body>
+</html>

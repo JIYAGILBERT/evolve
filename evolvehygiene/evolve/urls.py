@@ -15,7 +15,7 @@ urlpatterns = [
     path('logoutuser', views.logoutuser, name='logoutuser'),
     path('admin_dashboard', views.admin_dashboard, name='admin_dashboard'),
     path('register',views.register, name='register'),
-    path('logoutuser', views.logoutuser, name='logoutuser'),
+
     path('product_upload',views.product_upload, name='product_upload'),
     path('contact_us',views.contact_us, name='contact_us'),
     path('thank_you_page',views.thank_you_page, name='thank_you_page'),
@@ -28,6 +28,17 @@ urlpatterns = [
     path('dispenser',views.dispenser,name='dispenser'),
     path('cleaning_products',views.cleaning_products,name='cleaning_products'),
     # path('hoteloperational_products',views.hoteloperational_products,name='hoteloperational_products'),
+    # path('get_subcategories/', views.get_subcategories, name='get_subcategories'),
+    path('create_category/', views.create_category, name='create_category'),
+    path('create_subcategory/', views.create_subcategory, name='create_subcategory'),
+
+
+    path('get_subcategories/', views.get_subcategories, name='get_subcategories'),
+
+
+
+    path('categories/', views.category_list, name='category_list'),
+    # path('create_category/', views.create_category, name='create_category'),
 ] 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
