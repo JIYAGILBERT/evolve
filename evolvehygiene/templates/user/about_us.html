@@ -1,58 +1,59 @@
+<!-- {% extends 'base.html' %} -->
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'css/about_us.css' %}">
+    <link rel="stylesheet" href="{% static 'css/user/about_us.css' %}">
+    <link rel="stylesheet" href="{% static 'css/user/home.css' %}">
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+          <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
     <title>About evolve</title>
 </head>
 <body>
-    <div class="nav">
-        <div class="logo">
-            <img src="{% static 'image/evolve-logo.png' %}" alt="Evolve Logo">
-        </div>
-        <div class="left">
-            <a href="{% url 'landing_page' %}">Home</a>
-            <a href="{% url 'our_product' %}">Our Products</a>
-            <a href="{% url 'contact_us' %}">Contact</a>
-        </div>
-        <div class="right">
-            <i class="bi bi-search"><input type="text" placeholder="Search..."></i>
-        </div>
+    <nav class="navbar navbar-expand-lg navbar-custom">
+    <div class="container-fluid align-items-center justify-content-between d-flex">
+      
+      <!-- Logo -->
+      <div class="d-flex align-items-center">
+        <a href="{% url 'home' %}">
+        <img src="{% static 'image/evolve-logo.png' %}" alt="Evolve Hygiene" style="height: 40px; margin-right: 10px;" />
+        </a>
+      </div>
+
+      <!-- Search Bar -->
+      <form class="search-box mx-3" role="search">
+        <input type="text" placeholder="Search" aria-label="Search">
+        <button type="submit"><i class="bi bi-search"></i></button>
+      </form>
+
+      <!-- Menu -->
+      <div class="d-none d-lg-flex navbar-nav mx-3">
+        <a class="nav-link" href="#">BLOG</a>
+        <a class="nav-link" href="#">OUR PRODUCTS</a>
+        <!-- <a class="nav-link" href="{% url 'about_us' %}">ABOUT US</a> -->
+        <a class="nav-link" href="#">CONTACT</a>
+      </div>
+
+      <!-- Icons & Dropdown -->
+      <!-- <div class="icon-links d-flex align-items-center">
+        <i class="bi bi-heart"></i>
+        <i class="bi bi-cart"></i>
+
+      </div> -->
+
     </div>
+  </nav>
 
     <header>
         <h1>ABOUT US</h1>
     </header> 
 
-    <section class="about-us">
-        <!-- Icons Section -->
-        <div class="icons">
-            <div class="icon">
-                <i class="bi bi-award-fill"></i>
-                <p>Best Services</p>
-            </div>
-            <div class="icon">
-                <i class="bi bi-tree-fill"></i>
-                <p>Experiences</p>
-            </div>
-            <!-- <div class="icon">
-                <i class="bi bi-leaf-fill"></i>
-                <p>100% Natural</p>
-            </div> -->
-            <div class="icon">
-                <i class="bi bi-gear-fill"></i>
-                <p>Equipment</p>
-            </div>
-            <div class="icon">
-                <i class="bi bi-recycle"></i>
-                <p>Organic</p>
-            </div>
-        </div>
-    </section>
+
 
         <!-- About Us Section -->
         <div class="about-container">
@@ -75,7 +76,7 @@
 
             <!-- Video Play Section -->
             <div class="video">
-                <img src="{% static 'image/demo-1.jpg' %}" alt="Video Thumbnail">
+                <img src="{% static 'image/about-us-video.jpg' %}" alt="Video Thumbnail">
                 <a href="https://www.youtube.com/@evolvehygiene" class="play-button">
                     <i class="bi bi-play-fill"></i>
                 </a>

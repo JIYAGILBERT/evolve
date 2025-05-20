@@ -1,0 +1,30 @@
+
+        body {
+            background-color: #f8f9fa;
+            padding-top: 40px;
+        }
+        .form-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.08);
+            max-width: 600px;
+            margin: auto;
+        }
+        h2 {
+            margin-bottom: 25px;
+            font-weight: 600;
+            color: #343a40;
+        }
+        .btn-success {
+            margin-right: 10px;
+        }
+        a.cancel-link {
+            color: #6c757d;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        a.cancel-link:hover {
+            text-decoration: underline;
+        }
+   

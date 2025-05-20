@@ -1,0 +1,46 @@
+<!-- evolvehygiene/templates/user/payment_options.html -->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/user/payment_options.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="payment-container">
+    <h1>Payment Options</h1>
+    <div class="order-summary">
+        <h2>Order Summary</h2>
+        <div class="cart-items">
+            {% for item in cart_items %}
+                <div class="cart-item">
+                    <div class="item-details">
+                        <h3>{{ item.product.name }}</h3>
+                        <p>Brand: {{ item.product.brand }}</p>
+                        <p>Price: ₹{{ item.product.price }}</p>
+                        <p>Quantity: {{ item.quantity }}</p>
+                        <p>Total: ₹{{ item.total_price }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="summary-totals">
+            <p>Items: {{ total_items }}</p>
+            <p>Subtotal: ₹{{ subtotal }}</p>
+            <p>Shipping: Free</p>
+            <p class="total">Total: ₹{{ total }}</p>
+        </div>
+    </div>
+    <div class="payment-methods">
+        <h2>Choose Payment Method</h2>
+        <form method="post" action="{% url 'razorpay_payment' %}">
+            {% csrf_token %}
+            <button type="submit" class="btn razorpay-btn">Pay with Razorpay</button>
+        </form>
+        <form method="post" action="{% url 'cash_on_delivery' %}">
+            {% csrf_token %}
+            <button type="submit" class="btn cod-btn">Cash on Delivery</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

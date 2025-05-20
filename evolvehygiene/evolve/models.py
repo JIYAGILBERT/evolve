@@ -1,87 +1,114 @@
+# evolvehygiene/evolve/models.py
 from django.db import models
 from django.contrib.auth.models import User
-from decimal import Decimal
-from django import forms
 
-
-
-
-
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    phone = models.CharField(max_length=15, blank=True, null=True)
+    address = models.TextField(blank=True, null=True)
+    
+    def __str__(self):
+        return f"{self.user.username}'s Profile"
 
 class Category(models.Model):
-    name = models.CharField(max_length=100, unique=True)
-    
-    def __str__(self):      
+    name = models.CharField(max_length=100)
+    image = models.ImageField(upload_to='category_images/', blank=True, null=True)
+
+    def __str__(self):
         return self.name
 
 class SubCategory(models.Model):
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='subcategories')
+    category = models.ForeignKey(Category, related_name='subcategories', on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
-    
-    class Meta:
-        unique_together = ('category', 'name')  # Ensures subcategory names are unique within a category
+    image = models.ImageField(upload_to='subcategory_images/', blank=True, null=True)
     
     def __str__(self):
         return f"{self.category.name} - {self.name}"
 
 class Product(models.Model):
     name = models.CharField(max_length=200)
+    description = models.TextField(blank=True)
+    small_description = models.CharField(max_length=255, blank=True)
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
+    subcategory = models.ForeignKey(SubCategory, on_delete=models.SET_NULL, null=True, blank=True)
+    brand = models.CharField(max_length=100)
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    details = models.TextField()
-    weight = models.DecimalField(max_digits=10, decimal_places=2, help_text="Weight in kilograms")
-    offer_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    subcategory = models.ForeignKey(SubCategory, on_delete=models.SET_NULL, null=True, blank=True, related_name='products')
-    rating = models.DecimalField(max_digits=3, decimal_places=2, blank=True, null=True)
-    vector = models.JSONField(blank=True, null=True)  # For storing vector embeddings
-    
-    def __str__(self):
-        return self.name
+    offer_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    stock = models.PositiveIntegerField(default=0)
+    image = models.ImageField(upload_to='product_images/', null=True, blank=True)
+    is_available = models.BooleanField(default=True)
+    weight_or_volume = models.CharField(max_length=50, blank=True)
+    star_rating = models.PositiveIntegerField(default=1)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
-# class Category(models.Model):
-#     name = models.CharField(max_length=255)
-#     image = models.ImageField(upload_to='categories/', blank=True, null=True)
+    STAR_RATING_CHOICES = [
+        (1, '1'),
+        (2, '2'),
+        (3, '3'),
+        (4, '4'),
+        (5, '5'),
+    ]
 
-#     def __str__(self):
-#         return self.name
-
-class Gallery(models.Model):
-    feedimage = models.FileField()
-    name = models.CharField(max_length=100)
-    model=models.CharField(max_length=400)
-    category = models.CharField(max_length=100, default='uncategorized')                                                                                                                                                                
-    price = models.DecimalField(max_digits=10, decimal_places=2)  
-    # delivary = models.CharField(max_length=100)
-    
-    def __str__(self):
-        return self.name
+    def get_star_rating_choices(self):
+        return self.STAR_RATING_CHOICES
 
     def __str__(self):
         return self.name
 
+class UserActivity(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    email = models.EmailField()
+    is_active = models.BooleanField(default=True)
+    login_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.login_date}"
 
 class ContactMessage(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     email = models.EmailField()
     subject = models.CharField(max_length=200)
     message = models.TextField()
-    submitted_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"Message from {self.name}"
+        return f"Message from {self.name} - {self.subject}"
 
+class Order(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    total_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    payment_method = models.CharField(
+        max_length=20,
+        choices=[
+            ('razorpay', 'Online Payment (Razorpay)'),
+            ('cod', 'Cash on Delivery'),
+        ]
+    )
+    payment_status = models.CharField(
+        max_length=20,
+        choices=[
+            ('pending', 'Pending'),
+            ('completed', 'Completed'),
+            ('failed', 'Failed'),
+        ],
+        default='pending'
+    )
+    razorpay_order_id = models.CharField(max_length=100, blank=True, null=True)  # For Razorpay orders
+    razorpay_payment_id = models.CharField(max_length=100, blank=True, null=True)  # For Razorpay payments
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
-class ContactForm(forms.ModelForm):
-    class Meta:
-        model = ContactMessage
-        fields = ['name', 'email', 'subject', 'message']
+    def __str__(self):
+        return f"Order {self.id} by {self.user.username}"
 
-# class Contact(models.Model):
-#     name = models.CharField(max_length=255)
-#     email = models.EmailField()
-#     message = models.TextField()
-#     created_at = models.DateTimeField(auto_now_add=True)
+class OrderItem(models.Model):
+    order = models.ForeignKey(Order, related_name='items', on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
+    quantity = models.PositiveIntegerField()
+    price = models.DecimalField(max_digits=10, decimal_places=2)  # Price at the time of order
 
-#     def __str__(self):
-#         return self.name
-
-# Create your models here.
+    def __str__(self):
+        return f"{self.quantity} x {self.product.name} in Order {self.order.id}"

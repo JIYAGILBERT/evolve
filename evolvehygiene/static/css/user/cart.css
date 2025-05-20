@@ -1,0 +1,93 @@
+/* evolvehygiene/static/css/cart.css */
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #f8f9fa;
+}
+
+.card {
+    border: none;
+    border-radius: 10px;
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+h1 {
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+h4 {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+h5 {
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.btn-primary {
+    background-color: #2874f0;
+    border-color: #2874f0;
+    transition: background-color 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: #1a5dc4;
+    border-color: #1a5dc4;
+}
+
+.btn-outline-secondary {
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+.btn-danger {
+    border-radius: 5px;
+}
+
+.img-fluid {
+    max-height: 100px;
+    object-fit: cover;
+}
+
+.text-muted {
+    font-size: 0.9rem;
+}
+
+.badge {
+    font-size: 0.75rem;
+}
+
+/* Empty Cart */
+.text-center h4 {
+    font-size: 1.5rem;
+    color: #555;
+}
+
+.text-center p {
+    font-size: 1rem;
+    color: #777;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .container {
+        padding: 0 15px;
+    }
+
+    .card-body {
+        padding: 1rem;
+    }
+
+    .img-fluid {
+        max-height: 80px;
+    }
+}

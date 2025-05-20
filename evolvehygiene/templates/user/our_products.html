@@ -1,0 +1,46 @@
+<!-- evolvehygiene/templates/user/our_products.html -->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/user/our-products.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Our Products</h1>
+    <div class="row mt-4">
+        {% for product in products %}
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm">
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                    {% else %}
+                        <img src="{% static 'image/placeholder.jpg' %}" class="card-img-top" alt="Placeholder">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ product.name }}</h5>
+                        <p class="card-text">{{ product.small_description }}</p>
+                        <div class="text-center my-2">
+                            <span class="price">₹{{ product.price }}</span>
+                            {% if product.offer_price %}
+                                <span class="offer-price text-muted text-decoration-line-through ms-2">₹{{ product.offer_price }}</span>
+                                <span class="discount text-success ms-2">({{ product.discount }}% off)</span>
+                            {% endif %}
+                        </div>
+                        <div class="d-flex justify-content-center gap-2">
+                            {% if product.id|stringformat:"s" in cart %}
+                                <a href="{% url 'cart' %}" class="btn btn-success btn-sm">Go to Cart</a>
+                            {% else %}
+                                <a href="{% url 'add_to_cart' product.id %}" class="btn btn-primary btn-sm">Add to Cart</a>
+                            {% endif %}
+                            <a href="{% url 'buy_now' product.id %}" class="btn btn-outline-primary btn-sm">Buy Now</a>
+                            <a href="{% url 'add_to_wishlist' product.id %}" class="btn btn-outline-danger btn-sm"><i class="bi bi-heart"></i> Wishlist</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

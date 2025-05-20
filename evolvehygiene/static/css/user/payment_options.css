@@ -1,0 +1,118 @@
+/* evolvehygiene/static/css/payment_options.css */
+.payment-container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    font-family: 'Poppins', sans-serif;
+    background: #f8f9fa;
+    border-radius: 10px;
+}
+
+.payment-container h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.order-summary {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.order-summary h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.cart-item:last-child {
+    border-bottom: none;
+}
+
+.item-details h3 {
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.item-details p {
+    font-size: 0.9rem;
+    color: #666;
+    margin: 2px 0;
+}
+
+.summary-totals {
+    margin-top: 20px;
+    font-size: 1rem;
+    color: #333;
+}
+
+.summary-totals p {
+    display: flex;
+    justify-content: space-between;
+    margin: 5px 0;
+}
+
+.summary-totals .total {
+    font-weight: 600;
+    font-size: 1.2rem;
+}
+
+.payment-methods {
+    text-align: center;
+}
+
+.payment-methods h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.payment-methods form {
+    margin: 10px 0;
+}
+
+.btn {
+    display: inline-block;
+    padding: 12px 30px;
+    font-size: 1rem;
+    font-weight: 500;
+    text-decoration: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    border: none;
+}
+
+.razorpay-btn {
+    background-color: #2874f0;
+    color: #fff;
+}
+
+.razorpay-btn:hover {
+    background-color: #1a5dc4;
+}
+
+.cod-btn {
+    background-color: #f4c430;
+    color: #333;
+}
+
+.cod-btn:hover {
+    background-color: #e0b028;
+}

@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+{% block extra_css %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+
+<div class="container mt-4">
+    <h1 class="mb-4">Your Wishlist</h1>
+    
+    {% if wishlist_items %}
+        <div class="row">
+            {% for item in wishlist_items %}
+                <div class="col-md-3 mb-4">
+                    <div class="card h-100">
+                        <!-- Product Image -->
+                        {% if item.product.image %}
+                            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="card-img-top" style="height: 200px; object-fit: cover;">
+                        {% else %}
+                            <img src="https://via.placeholder.com/150" alt="No Image" class="card-img-top" style="height: 200px; object-fit: cover;">
+                        {% endif %}
+                        
+                        <!-- Product Details -->
+                        <div class="card-body">
+                            <h5 class="card-title">{{ item.product.name }}</h5>
+                            <p class="card-text">
+                                <strong>Price:</strong> ₹{{ item.product.price }}<br>
+                                {% if item.product.offer_price %}
+                                    <span class="text-muted text-decoration-line-through">₹{{ item.product.offer_price }}</span>
+                                    <span class="text-success">
+                                        ({{ item.product.price|calculate_discount:item.product.offer_price}}% off)
+                                    </span><br>
+                                {% endif %}
+                                <strong>Brand:</strong> {{ item.product.brand }}<br>
+                                <strong>Availability:</strong> 
+                                {% if item.product.is_available %}
+                                    <span class="text-success">In Stock</span>
+                                {% else %}
+                                    <span class="text-danger">Out of Stock</span>
+                                {% endif %}
+                            </p>
+                            
+                            <!-- Add to Cart Button -->
+                            <a href="{% url 'add_to_cart' item.product.id %}" class="btn btn-outline-primary btn-sm w-100">
+                                <i class="bi bi-cart"></i> Add to Cart
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>Your wishlist is empty.</p>
+    {% endif %}
+</div>
+{% endblock %}
+</body>
+</html>

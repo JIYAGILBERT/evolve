@@ -1,0 +1,57 @@
+.navbar-custom {
+      background: linear-gradient(to right, #f8e9e9, #fdfbfb);
+      padding: 10px 30px;
+    }
+    .navbar-nav .nav-link {
+      font-weight: 600;
+      color: #333;
+      margin: 0 15px;
+    }
+    .search-box {
+      border: 1px solid #333;
+      border-radius: 25px;
+      overflow: hidden;
+      display: flex;
+      width: 400px;
+    }
+    .search-box input {
+      border: none;
+      outline: none;
+      padding: 5px 10px;
+      flex: 1;
+      border-radius: 25px 0 0 25px;
+    }
+    .search-box button {
+      border: none;
+      background: white;
+      padding: 5px 15px;
+      border-left: 1px solid #ccc;
+    }
+    .icon-links i {
+      font-size: 1.5rem;
+      margin: 0 10px;
+      cursor: pointer;
+    }
+    .dropdown-menu {
+      min-width: 100px;
+    }
+    .dropdown-toggle::after {
+      margin-left: 4px;
+    }
+
+
+
+    
+        body {
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        .profile-card {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+  

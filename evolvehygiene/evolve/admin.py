@@ -1,48 +1,43 @@
-from .models import ContactMessage, Gallery
-from .models import Category, SubCategory, Product
+# evolve/admin.py
 from django.contrib import admin
-# from .models import Gallery
+from .models import Profile, Category, SubCategory, Product, UserActivity
 
-
-admin.site.register(Gallery)
-
-@admin.register(ContactMessage)
-class ContactMessageAdmin(admin.ModelAdmin):
-    list_display = ('name', 'email', 'subject', 'submitted_at')
-
-
-
-
-class SubCategoryInline(admin.TabularInline):  # or admin.StackedInline
-    model = SubCategory
-    extra = 1  # Number of empty forms to display
+@admin.register(Profile)
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = ('user', 'phone', 'address')
+    search_fields = ('user__username', 'phone')
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('name',)
     search_fields = ('name',)
-    inlines = [SubCategoryInline]  # Show subcategories when editing category
 
 @admin.register(SubCategory)
 class SubCategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'category')
-    list_filter = ('category',)
     search_fields = ('name', 'category__name')
+    list_filter = ('category',)
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'price', 'offer_price', 'subcategory', 'rating')
-    list_filter = ('subcategory__category', 'subcategory')
-    search_fields = ('name', 'details')
-    readonly_fields = ('rating',)  # If rating is calculated automatically
+    list_display = ('name', 'category', 'subcategory', 'brand', 'price', 'offer_price', 'stock', 'is_available', 'star_rating')
+    list_filter = ('category', 'subcategory', 'is_available')
+    search_fields = ('name', 'brand', 'description', 'small_description')
     fieldsets = (
-        ('Basic Information', {
-            'fields': ('name', 'details', 'subcategory')
+        (None, {
+            'fields': ('name', 'description', 'small_description', 'category', 'subcategory', 'brand')
         }),
-        ('Pricing', {
-            'fields': ('price', 'offer_price')
+        ('Pricing and Stock', {
+            'fields': ('price', 'offer_price', 'stock', 'is_available')
         }),
-        ('Other Details', {
-            'fields': ('weight', 'rating', 'vector')
+        ('Additional Info', {
+            'fields': ('image', 'weight_or_volume', 'star_rating')
         }),
     )
+
+@admin.register(UserActivity)
+class UserActivityAdmin(admin.ModelAdmin):
+    list_display = ('user', 'email', 'login_date', 'is_active')
+    list_filter = ('is_active', 'login_date')
+    search_fields = ('user__username', 'email')
+    ordering = ('-login_date',)

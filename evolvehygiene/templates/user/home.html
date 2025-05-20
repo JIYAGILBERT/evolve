@@ -1,0 +1,253 @@
+<!-- evolvehygiene/templates/user/home.html -->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/user/home.css' %}" />
+    <style>
+        .star-rating {
+            color: #f4c430;
+            margin-bottom: 10px;
+        }
+        .small-description {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <!-- Carousel Section -->
+    <div class="carousel-wrapper">
+        <div id="autoCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <div class="card text-center border-0">
+                        <img src="{% static 'image/banner-welcomeimg.jpg' %}" class="d-block w-100" alt="Hotel Operational">
+                        <div class="card-body p-0 pt-3">
+                            <a href="#" class="btn btn-outline-primary rounded-pill px-4">
+                                Explore More <i class="bi bi-arrow-right ms-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="card text-center border-0">
+                        <img src="{% static 'image/banner-img1.jpg' %}" class="d-block w-100" alt="Home Improvement">
+                        <div class="card-body p-0 pt-3">
+                            <a href="#" class="btn btn-outline-primary rounded-pill px-4">
+                                Explore More <i class="bi bi-arrow-right ms-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="card text-center border-0">
+                        <img src="{% static 'image/banner-img2.jpg' %}" class="d-block w-100" alt="Cleaning Hygiene">
+                        <div class="card-body p-0 pt-3">
+                            <a href="#" class="btn btn-outline-primary rounded-pill px-4">
+                                Explore More <i class="bi bi-arrow-right ms-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="card text-center border-0">
+                        <img src="{% static 'image/banner-img3.jpg' %}" class="d-block w-100" alt="Equipments">
+                        <div class="card-body p-0 pt-3">
+                            <a href="#" class="btn btn-outline-primary rounded-pill px-4">
+                                Explore More <i class="bi bi-arrow-right ms-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#autoCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#autoCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Category Section -->
+    <div class="container py-5">
+        <h2 class="text-center mb-5">
+            <span class="border-bottom border-dark pb-2">
+                {% if subcategories %}
+                    {{ selected_category.name }} - Subcategories
+                {% else %}
+                    Categories
+                {% endif %}
+            </span>
+        </h2>
+        <div class="row g-4">
+            {% if subcategories %}
+                <!-- Display Subcategories -->
+                {% for subcategory in subcategories %}
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                    <a href="{% url 'our_products' %}?subcategory={{ subcategory.id }}" class="category-card text-decoration-none">
+                        {% if subcategory.image %}
+                        <img src="{{ subcategory.image.url }}" alt="{{ subcategory.name }}" class="category-img">
+                        {% else %}
+                        <div class="category-img-placeholder">
+                            <i class="bi bi-image"></i>
+                        </div>
+                        {% endif %}
+                        <div class="category-title">
+                            {{ subcategory.name|upper }}
+                        </div>
+                    </a>
+                </div>
+                {% empty %}
+                <div class="col-12 text-center py-4">
+                    <p>No subcategories available for {{ selected_category.name }}.</p>
+                </div>
+                {% endfor %}
+                <!-- Back to Categories Link -->
+                <div class="col-12 text-center mt-4">
+                    <a href="{% url 'home' %}" class="btn btn-outline-secondary">Back to Categories</a>
+                </div>
+            {% else %}
+                <!-- Display Categories -->
+                {% for category in categories %}
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                    <a href="{% url 'home' %}?category_id={{ category.id }}" class="category-card text-decoration-none">
+                        {% if category.image %}
+                        <img src="{{ category.image.url }}" alt="{{ category.name }}" class="category-img">
+                        {% else %}
+                        <div class="category-img-placeholder">
+                            <i class="bi bi-image"></i>
+                        </div>
+                        {% endif %}
+                        <div class="category-title">
+                            {% with name=category.name|upper %}
+                                {% if name|wordcount > 2 %}
+                                    {{ name|truncatewords:2 }}<br>
+                                    {{ name|cut:name|truncatewords:2|slice:"3:"|wordwrap:2|linebreaksbr }}
+                                {% else %}
+                                    {{ name }}
+                                {% endif %}
+                            {% endwith %}
+                        </div>
+                    </a>
+                </div>
+                {% empty %}
+                <div class="col-12 text-center py-4">
+                    <p>No categories available</p>
+                </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Products Section -->
+    <div class="container py-5">
+        <h2 class="text-center mb-5">
+            <span class="border-bottom border-dark pb-2">Featured Products</span>
+        </h2>
+        <div class="row g-4">
+            {% for product in products %}
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                <div class="card shadow-sm">
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                    {% else %}
+                        <img src="{% static 'image/placeholder.jpg' %}" class="card-img-top" alt="Placeholder">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ product.name }}</h5>
+                        <p class="card-text small-description">{{ product.small_description }}</p>
+                        <div class="star-rating">
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= product.star_rating %}
+                                    <span>★</span>
+                                {% else %}
+                                    <span>☆</span>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <div class="text-center my-2">
+                            <span class="price">₹{{ product.price }}</span>
+                            {% if product.offer_price %}
+                            <span class="offer-price">₹{{ product.offer_price }}</span>
+                            {% endif %}
+                        </div>
+                        <div class="d-flex justify-content-center gap-2">
+                            {% if product.id|stringformat:"s" in cart %}
+                                <a href="{% url 'cart' %}" class="btn btn-success btn-sm">Go to Cart</a>
+                            {% else %}
+                                <a href="{% url 'add_to_cart' product.id %}" class="btn btn-primary btn-sm"><i class="bi bi-cart-plus"></i> Add to Cart</a>
+                            {% endif %}
+                            <a href="{% url 'buy_now' product.id %}" class="btn btn-outline-primary btn-sm">Buy Now</a>
+                            <a href="{% url 'add_to_wishlist' product.id %}" class="btn btn-outline-danger btn-sm"><i class="bi bi-heart"></i> Wishlist</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center py-4">
+                <p>No products available at the moment.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer py-5">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-md-3">
+                    <div class="footer-branding">
+                        <img src="{% static 'image/evolve-logo.png' %}" alt="Evolve Logo" class="mb-3" style="height: 50px;">
+                        <p>© All rights reserved by Evolve Hygiene, Cochin, India.</p>
+                        <div class="social-icons d-flex gap-3">
+                            <a href="#" class="text-dark"><i class="bi bi-facebook"></i></a>
+                            <a href="#" class="text-dark"><i class="bi bi-twitter"></i></a>
+                            <a href="#" class="text-dark"><i class="bi bi-linkedin"></i></a>
+                            <a href="#" class="text-dark"><i class="bi bi-instagram"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="footer-section">
+                        <h3 class="fw-bold">Solutions</h3>
+                        <ul class="list-unstyled">
+                            <li><a href="#" class="text-dark text-decoration-none">My Account</a></li>
+                            <li><a href="#" class="text-dark text-decoration-none">Track Your Order</a></li>
+                            <li><a href="#" class="text-dark text-decoration-none">Order History</a></li>
+                            <li><a href="#" class="text-dark text-decoration-none">Payment Methods</a></li>
+                            <li><a href="#" class="text-dark text-decoration-none">Privacy Policy</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="footer-section">
+                        <h3 class="fw-bold">About Us</h3>
+                        <ul class="list-unstyled">
+                            <li><a href="#" class="text-dark text-decoration-none">About Us</a></li>
+                            <li><a href="#" class="text-dark text-decoration-none">Terms & Conditions</a></li>
+                            <li><a href="#" class="text-dark text-decoration-none">Privacy Policy</a></li>
+                            <li><a href="#" class="text-dark text-decoration-none">Return Policy</a></li>
+                            <li><a href="#" class="text-dark text-decoration-none">Site Map</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="footer-section">
+                        <h3 class="fw-bold">Contact Us</h3>
+                        <ul class="list-unstyled">
+                            <li><i class="bi bi-geo-alt-fill me-2 text-primary"></i> Phase-1, Hygiene Road, Panangad, Ernakulam, Kerala</li>
+                            <li><i class="bi bi-telephone-fill me-2 text-primary"></i> 090726 68921</li>
+                            <li><i class="bi bi-clock-fill me-2 text-primary"></i> Mon - Sat / 9:30AM - 6:00PM</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+{% endblock %}

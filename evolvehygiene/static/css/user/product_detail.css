@@ -1,0 +1,87 @@
+
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
+.product-name {
+    font-size: 24px;
+    font-weight: 500;
+    color: #212121;
+}
+
+.product-rating .badge {
+    background-color: #FFE500;
+    color: #212121;
+    font-size: 14px;
+    padding: 5px 10px;
+}
+
+.current-price {
+    font-weight: bold;
+    color: #212121;
+}
+
+.original-price {
+    font-size: 16px;
+}
+
+.discount {
+    font-size: 14px;
+}
+
+.stock-status {
+    font-size: 14px;
+}
+
+.product-actions .btn-primary {
+    background-color: #2874F0;
+    border: none;
+    padding: 10px 20px;
+}
+
+.product-actions .btn-primary:hover {
+    background-color: #1a5dc4;
+}
+
+.product-actions .btn-success {
+    background-color: #FB641B;
+    border: none;
+    padding: 10px 20px;
+}
+
+.product-actions .btn-success:hover {
+    background-color: #e55a17;
+}
+
+.product-description h4 {
+    font-size: 18px;
+    font-weight: 500;
+    color: #212121;
+}
+
+.product-description p {
+    color: #666;
+    font-size: 14px;
+}
+
+.specifications h3, .related-products h3 {
+    font-size: 20px;
+    font-weight: 500;
+    color: #212121;
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 10px;
+}
+
+.table-bordered td {
+    font-size: 14px;
+    color: #666;
+}
+
+.card-img-top {
+    height: 150px;
+    object-fit: cover;
+}
+
+.thumbnail:hover {
+    opacity: 0.8;
+}

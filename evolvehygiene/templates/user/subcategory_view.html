@@ -1,0 +1,38 @@
+<!-- evolvehygiene/templates/user/subcategory_view.html -->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/user/home.css' %}" />
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h2 class="text-center mb-5">
+        <span class="border-bottom border-dark pb-2">{{ category.name }} - Subcategories</span>
+    </h2>
+    <div class="row g-4">
+        {% for subcategory in subcategories %}
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+            <div class="card shadow-sm">
+                {% if subcategory.image %}
+                    <img src="{{ subcategory.image.url }}" alt="{{ subcategory.name }}" class="card-img-top">
+                {% else %}
+                    <div class="category-img-placeholder">
+                        <i class="bi bi-image"></i>
+                    </div>
+                {% endif %}
+                <div class="card-body text-center">
+                    <h5 class="card-title">{{ subcategory.name }}</h5>
+                    <a href="{% url 'our_products' %}?subcategory={{ subcategory.id }}" class="btn btn-outline-primary btn-sm">View Products</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center py-4">
+            <p>No subcategories available for {{ category.name }}.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

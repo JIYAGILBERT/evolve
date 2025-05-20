@@ -1,150 +1,166 @@
+{% extends 'base.html' %}
 {% load static %}
+
+{% block extra_css %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+   
     <link rel="stylesheet" href="{% static 'css/contact_us.css' %}">
+    <link rel="stylesheet" href="{% static 'css/user/home.css' %}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <title>About evolve</title>
 </head>
 <body>
-    <div class="nav">
-        <div class="logo">
-            <img src="{% static 'image/evolve-logo.png' %}" alt="Evolve Logo">
-        </div>
-        <div class="left">
-            <a href="{% url 'landing_page' %}">Home</a>
-            <a href="{% url 'about_us' %}">About Us</a>
-            <a href="{% url 'our_product' %}">Our Products</a>
-             <a href="{% url 'contact_us' %}">contact</a>
-        </div>
-        <div class="right">
-            <i class="bi bi-search"><input type="text" placeholder="Search..."></i>
-        </div>
-    </div>
+    
+<!-- {% endblock %} -->
+
+{% block content %}
+
 
     <!-- Header -->
-    <header>
-        <h1>Contact Us</h1>
-        <p>Evolve Hygiene provides innovative, high-quality cleaning and hygiene solutions for homes, businesses, and industries.  
+    <header class="text-center py-5 text-white" style="background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('#') center/cover;">
+        <h1 class="display-4 fw-bold">Contact Us</h1>
+        <p class="lead mx-auto" style="max-width: 800px;">
+            Evolve Hygiene provides innovative, high-quality cleaning and hygiene solutions for homes, businesses, and industries.  
             We prioritize sustainability and performance to create safer, healthier environments.  
             With a customer-first approach, we deliver reliable products and expert support tailored to your needs.
         </p>
     </header>
-    
 
     <!-- Contact Information Section -->
-    <section class="contact-info-1">
-        <div class="info-box">
-            <i class="bi bi-envelope-at-fill"></i>
-            <h3>Email</h3>
-            <p>els@evolveglobal.com</p>
+    <section class="contact-info-1 py-5">
+        <div class="container">
+            <div class="row g-4 justify-content-center">
+                <div class="col-md-4">
+                    <div class="info-box text-center p-4 bg-white rounded shadow-sm">
+                        <i class="bi bi-envelope-at-fill display-6 text-primary mb-3"></i>
+                        <h3>Email</h3>
+                        <p>els@evolveglobal.com</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="info-box text-center p-4 bg-white rounded shadow-sm">
+                        <i class="bi bi-geo-alt-fill display-6 text-primary mb-3"></i>
+                        <h3>Address</h3>
+                        <p>Phase-1, Hygiene Road, Madavana, Panangad, Ernakulam, Kerala 682506, India</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="info-box text-center p-4 bg-white rounded shadow-sm">
+                        <i class="bi bi-telephone-fill display-6 text-primary mb-3"></i>
+                        <h3>Phone</h3>
+                        <p>+91 9072668921</p>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="info-box">
-            <i class="bi bi-geo-alt-fill"></i>
-            <h3>Address</h3>
-            <p>Phase-1, Hygiene Road, Madavana, Panangad, Ernakulam, Kerala 682506, India</p>
-        </div>
-        <div class="info-box">
-            <i class="bi bi-telephone-fill"></i>
-            <h3>Phone</h3>
-            <p>+91 9072668921</p>
-        </div>
-       
     </section>
 
     <!-- Contact Form Section -->
-    <div class="container">
-        <div class="contact-info">
-            <h2>Contact Evolve Hygiene Sales Team</h2>
-            <p>Already a customer or need help with an order? <a href="#">+91 9072668920</a></p>
-            
-            <h4>Evolve Sales</h4>
-            <p>📞 +91 9995993005</p>
-            
-            <h4>International Sales</h4>
-            <p>For global inquiries, fill out your details to get in touch with our team.→ </p>
-            
-            <div class="social-icons">
-                <a href="facebook.com/evolvehygieneofficial"><i class="bi bi-facebook"></i></a>
-                <a href="instagram.com/evolvehygiene"><i class="bi bi-instagram"></i></a>
-            </div>
-        </div>
-        <div class="form-container">
-            <section class="contact-container">
-                <h2>Get In Touch With Us</h2>
-                <div class="contact-content">
-                    {% if not user.is_authenticated %}
-                        <p>You need to <a href="{% url 'login' %}">login</a> or <a href="{% url 'register' %}">register</a> to send a message.</p>
-                    {% else %}
-                        <form class="contact-form" method="post">
-                            {% csrf_token %}
-                            {{ form.as_p }}
-                            <button type="submit">SEND MESSAGE</button>
-                        </form>
-                    {% endif %}
+    <div class="container py-5">
+        <div class="row g-4">
+            <div class="col-lg-6">
+                <div class="contact-info p-4 rounded shadow-sm" style="background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);">
+                    <h2 class="position-relative pb-2 mb-4">Contact Evolve Hygiene Sales Team</h2>
+                    <p>Already a customer or need help with an order? <a href="#" class="text-primary">+91 9072668920</a></p>
+                    <h4>Evolve Sales</h4>
+                    <p>📞 +91 9995993005</p>
+                    <h4>International Sales</h4>
+                    <p>For global inquiries, fill out your details to get in touch with our team.→</p>
+                    <div class="social-icons d-flex gap-3 mt-4">
+                        <a href="https://facebook.com/evolvehygieneofficial" class="d-flex align-items-center justify-content-center rounded-circle bg-primary text-white" style="width: 40px; height: 40px;"><i class="bi bi-facebook"></i></a>
+                        <a href="https://instagram.com/evolvehygiene" class="d-flex align-items-center justify-content-center rounded-circle bg-primary text-white" style="width: 40px; height: 40px;"><i class="bi bi-instagram"></i></a>
+                    </div>
                 </div>
-            </section>
+            </div>
+            <div class="col-lg-6">
+                <div class="contact-container p-4 bg-white rounded shadow-sm">
+                    <h2 class="position-relative pb-2 mb-4">Get In Touch With Us</h2>
+                    <div class="contact-content">
+                        {% if not user.is_authenticated %}
+                            <p class="text-center">You need to <a href="{% url 'user_login' %}" class="text-primary">login</a> or <a href="{% url 'usersignup' %}" class="text-primary">register</a> to send a message.</p>
+                        {% else %}
+                            <form class="contact-form" method="post">
+                                {% csrf_token %}
+                                {{ form.as_p }}
+                                <button type="submit" class="btn btn-primary w-100 text-uppercase fw-bold mt-3">Send Message</button>
+                            </form>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
     <!-- Google Maps Embed -->
-    <div class="map-container mt-4">
-        <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d1965.169996670417!2d76.319173!3d9.905615!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b0873d100021925%3A0x5b3ec9bc1dc08edf!2sEvolve%20Hygiene!5e0!3m2!1sen!2sus!4v1742574278970!5m2!1sen!2sus" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    <div class="map-container py-5">
+        <div class="container">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d1965.169996670417!2d76.319173!3d9.905615!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b0873d100021925%3A0x5b3ec9bc1dc08edf!2sEvolve%20Hygiene!5e0!3m2!1sen!2sus!4v1742574278970!5m2!1sen!2sus" class="w-100 rounded" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
     </div>
 
-    <div>
-        <h1>"Thank you for choosing Evolve Hygiene — where cleanliness meets innovation. Together, let’s create healthier, safer spaces for a better tomorrow."</h1>
+    <!-- Thank You Message -->
+    <div class="thank-you text-center py-5">
+        <h1 class="display-6">"Thank you for choosing Evolve Hygiene — where cleanliness meets innovation. Together, let’s create healthier, safer spaces for a better tomorrow."</h1>
     </div>
 
     <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-container">
-            <div class="footer-branding">
-                <img src="{% static 'image/evolve-logo.png' %}" alt="Evolve Logo">  
-                <p>© All rights reserved by Evolve Hygiene, Cochin, India.</p>
-                <div class="social-icons">
-                    <a href="#"><i class="bi bi-facebook"></i></a>
-                    <a href="#"><i class="bi bi-twitter"></i></a>
-                    <a href="#"><i class="bi bi-linkedin"></i></a>
-                    <a href="#"><i class="bi bi-instagram"></i></a>
+    <footer class="footer py-5" style="background: linear-gradient(rgba(175, 193, 251, 0.5), rgba(200, 197, 197, 0.5));">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-md-3">
+                    <div class="footer-branding">
+                        <img src="{% static 'image/evolve-logo.png' %}" alt="Evolve Logo" class="mb-3" style="height: 50px;">
+                        <p>© All rights reserved by Evolve Hygiene, Cochin, India.</p>
+                        <div class="social-icons d-flex gap-3">
+                            <a href="#" class="text-dark"><i class="bi bi-facebook"></i></a>
+                            <a href="#" class="text-dark"><i class="bi bi-twitter"></i></a>
+                            <a href="#" class="text-dark"><i class="bi bi-linkedin"></i></a>
+                            <a href="#" class="text-dark"><i class="bi bi-instagram"></i></a>
+                        </div>
+                    </div>
                 </div>
-            </div>
-
-            <!-- Footer Sections -->
-            <div class="footer-section">
-                <h3>Solutions</h3>
-                <ul>
-                    <li><a href="#">My Account</a></li>
-                    <li><a href="#">Track Your Order</a></li>
-                    <li><a href="#">Order History</a></li>
-                    <li><a href="#">Payment Methods</a></li>
-                    <li><a href="#">Privacy Policy</a></li>
-                </ul>
-            </div>
-
-            <div class="footer-section">
-                <h3>About Us</h3>
-                <ul>
-                    <li><a href="#">About Us</a></li>
-                    <li><a href="#">Terms & Conditions</a></li>
-                    <li><a href="#">Privacy Policy</a></li>
-                    <li><a href="#">Return Policy</a></li>
-                    <li><a href="#">Site Map</a></li>
-                </ul>
-            </div>
-
-            <div class="footer-section">
-                <h3>Contact Us</h3>
-                <ul>
-                    <li><i class="bi bi-geo-alt-fill"></i> Phase-1, Hygiene Road, Panangad, Ernakulam, Kerala</li>
-                    <li><i class="bi bi-telephone-fill"></i> 090726 68921</li>
-                    <li><i class="bi bi-clock-fill"></i> Mon - Sat / 9:30AM - 6:00PM</li>
-                </ul>
+                <div class="col-md-3">
+                    <div class="footer-section">
+                        <h3 class="fw-bold">Solutions</h3>
+                        <ul class="list-unstyled">
+                            <li><a href="#" class="text-dark text-decoration-none">My Account</a></li>
+                            <li><a href="#" class="text-dark text-decoration-none">Track Your Order</a></li>
+                            <li><a href="#" class="text-dark text-decoration-none">Order History</a></li>
+                            <li><a href="#" class="text-dark text-decoration-none">Payment Methods</a></li>
+                            <li><a href="#" class="text-dark text-decoration-none">Privacy Policy</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="footer-section">
+                        <h3 class="fw-bold">About Us</h3>
+                        <ul class="list-unstyled">
+                            <li><a href="#" class="text-dark text-decoration-none">About Us</a></li>
+                            <li><a href="#" class="text-dark text-decoration-none">Terms & Conditions</a></li>
+                            <li><a href="#" class="text-dark text-decoration-none">Privacy Policy</a></li>
+                            <li><a href="#" class="text-dark text-decoration-none">Return Policy</a></li>
+                            <li><a href="#" class="text-dark text-decoration-none">Site Map</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="footer-section">
+                        <h3 class="fw-bold">Contact Us</h3>
+                        <ul class="list-unstyled">
+                            <li><i class="bi bi-geo-alt-fill me-2 text-primary"></i> Phase-1, Hygiene Road, Panangad, Ernakulam, Kerala</li>
+                            <li><i class="bi bi-telephone-fill me-2 text-primary"></i> 090726 68921</li>
+                            <li><i class="bi bi-clock-fill me-2 text-primary"></i> Mon - Sat / 9:30AM - 6:00PM</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </footer>
-
+{% endblock %}
 </body>
 </html>

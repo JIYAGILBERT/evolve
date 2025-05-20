@@ -1,44 +1,62 @@
-from django.contrib import admin
-from evolve import views
-from django.urls import path,include
-from django.conf.urls.static import static
+# evolvehygiene/evolve/urls.py
+from django.urls import path
+from . import views
 from django.conf import settings
-
+from django.conf.urls.static import static
 
 urlpatterns = [
-    path('',views.landing_page, name='landing_page'),
-    path('about_us',views.about_us, name='about_us'),   
-    path('our_product',views.our_product, name='our_product'),   
-    # path('contact',views.contact, name='contact'), 
-    path('userlogin',views.userlogin, name='userlogin'), 
-    path('user_home',views.user_home, name='user_home'),
-    path('logoutuser', views.logoutuser, name='logoutuser'),
-    path('admin_dashboard', views.admin_dashboard, name='admin_dashboard'),
-    path('register',views.register, name='register'),
-
-    path('product_upload',views.product_upload, name='product_upload'),
-    path('contact_us',views.contact_us, name='contact_us'),
-    path('thank_you_page',views.thank_you_page, name='thank_you_page'),
-    path('accounts/', include('django.contrib.auth.urls')),  # <-- Add this line!
-    path('deletion/<int:id>',views.delete_g,name='deletion'),
-    path('edit_g/<int:id>',views.edit_g,name='edit_g'),
-    path('search_result',views.search_result,name='search_result'),
-#   path('samp',views.samp,name='samp'),
-    path('users/', views.admin_users, name='admin_users'),
-    path('dispenser',views.dispenser,name='dispenser'),
-    path('cleaning_products',views.cleaning_products,name='cleaning_products'),
-    # path('hoteloperational_products',views.hoteloperational_products,name='hoteloperational_products'),
-    # path('get_subcategories/', views.get_subcategories, name='get_subcategories'),
-    path('create_category/', views.create_category, name='create_category'),
-    path('create_subcategory/', views.create_subcategory, name='create_subcategory'),
-
-
-    path('get_subcategories/', views.get_subcategories, name='get_subcategories'),
-
-
-
+    path('', views.home, name='home'),
+    path('getusername/', views.getusername, name='getusername'),
+    path('verifyotp/', views.verifyotp, name='verifyotp'),
+    path('usersignup/', views.usersignup, name='usersignup'),
+    path('user_login/', views.user_login, name='user_login'),
+    path('forgotpassword/', views.passwordreset, name='forgotpassword'),
+    path('logout/', views.logoutuser, name='logout'),
+    path('profile/', views.profile, name='profile'),
+    path('profile/edit/', views.profile_edit, name='profile_edit'),
+    path('about-us/', views.about_us, name='about_us'),
+    path('contact-us/', views.contact_us, name='contact_us'),
+    path('subcategory/<int:category_id>/', views.subcategory_view, name='subcategory_view'),
+    
+    path('product/<int:product_id>/', views.product_detail, name='product_detail'),
+    path('add-to-cart/<int:product_id>/', views.add_to_cart, name='add_to_cart'),
+    path('increase-quantity/<int:product_id>/', views.increase_quantity, name='increase_quantity'),
+    path('decrease-quantity/<int:product_id>/', views.decrease_quantity, name='decrease_quantity'),
+    path('remove-from-cart/<int:product_id>/', views.remove_from_cart, name='remove_from_cart'),
+    path('add-to-wishlist/<int:product_id>/', views.add_to_wishlist, name='add_to_wishlist'),
+    path('buy-now/<int:product_id>/', views.buy_now, name='buy_now'),
+    path('cart/', views.cart, name='cart'),
+    path('wishlist/', views.wishlist, name='wishlist'),
+    path('checkout/', views.checkout, name='checkout'),
+    path('payment-options/', views.payment_options, name='payment_options'),    
+    path('cash_on_delivery/', views.cash_on_delivery, name='cash_on_delivery'),
+    path('razorpay_payment/', views.razorpay_payment, name='razorpay_payment'),
+    path('order-success/<int:order_id>/', views.order_success, name='order_success'),  
+    
+    path('our-products/', views.our_products, name='our_products'),
+    
+    # Admin URLs
+    path('admin-home/', views.admin_home, name='admin-home'),
     path('categories/', views.category_list, name='category_list'),
-    # path('create_category/', views.create_category, name='create_category'),
-] 
+    path('categories/add/', views.add_category, name='add_category'),
+    path('categories/edit/<int:category_id>/', views.edit_category, name='edit_category'),
+    path('categories/delete/<int:category_id>/', views.delete_category, name='delete_category'),
+    path('subcategories/', views.subcategory_list, name='subcategory_list'),
+    path('subcategories/add/', views.add_subcategory, name='add_subcategory'),
+    path('subcategories/edit/<int:subcategory_id>/', views.edit_subcategory, name='edit_subcategory'),
+    path('subcategories/delete/<int:subcategory_id>/', views.delete_subcategory, name='delete_subcategory'),
+    path('admin-subcategory/<int:category_id>/', views.admin_subcategory_view, name='admin_subcategory_view'),
+    path('search/', views.search, name='search'),
+    
+    # Product URLs
+    path('product-list/', views.product_list, name='product_list'),
+    path('add-product/', views.add_product, name='add_product'),
+    path('edit-product/<int:product_id>/', views.edit_product, name='edit_product'),
+    path('delete-product/<int:product_id>/', views.delete_product, name='delete_product'),
+    path('get-subcategories/', views.get_subcategories, name='get_subcategories'),
+    path('notifications/', views.notifications, name='notifications'),
+    path('mark-notification-read/<int:message_id>/', views.mark_notification_read, name='mark_notification_read'),
+]
+
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
