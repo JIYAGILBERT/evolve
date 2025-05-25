@@ -26,7 +26,7 @@
                     <div class="card text-center border-0">
                         <img src="{% static 'image/banner-welcomeimg.jpg' %}" class="d-block w-100" alt="Hotel Operational">
                         <div class="card-body p-0 pt-3">
-                            <a href="#" class="btn btn-outline-primary rounded-pill px-4">
+                            <a href="{% url 'our_products' %}" class="btn btn-outline-primary rounded-pill px-4">
                                 Explore More <i class="bi bi-arrow-right ms-2"></i>
                             </a>
                         </div>
@@ -36,7 +36,7 @@
                     <div class="card text-center border-0">
                         <img src="{% static 'image/banner-img1.jpg' %}" class="d-block w-100" alt="Home Improvement">
                         <div class="card-body p-0 pt-3">
-                            <a href="#" class="btn btn-outline-primary rounded-pill px-4">
+                            <a href="{% url 'our_products' %}" class="btn btn-outline-primary rounded-pill px-4">
                                 Explore More <i class="bi bi-arrow-right ms-2"></i>
                             </a>
                         </div>
@@ -46,7 +46,7 @@
                     <div class="card text-center border-0">
                         <img src="{% static 'image/banner-img2.jpg' %}" class="d-block w-100" alt="Cleaning Hygiene">
                         <div class="card-body p-0 pt-3">
-                            <a href="#" class="btn btn-outline-primary rounded-pill px-4">
+                            <a href="{% url 'our_products' %}" class="btn btn-outline-primary rounded-pill px-4">
                                 Explore More <i class="bi bi-arrow-right ms-2"></i>
                             </a>
                         </div>
@@ -56,7 +56,7 @@
                     <div class="card text-center border-0">
                         <img src="{% static 'image/banner-img3.jpg' %}" class="d-block w-100" alt="Equipments">
                         <div class="card-body p-0 pt-3">
-                            <a href="#" class="btn btn-outline-primary rounded-pill px-4">
+                            <a href="{% url 'our_products' %}" class="btn btn-outline-primary rounded-pill px-4">
                                 Explore More <i class="bi bi-arrow-right ms-2"></i>
                             </a>
                         </div>
@@ -145,22 +145,104 @@
         </div>
     </div>
 
-    <!-- Products Section -->
+    <div class="full-width-banner">
+        <div class="banner-content">
+            <img src="{% static 'image/banner-girl.png' %}" alt="Cleaning Products" class="banner-image">
+            <div class="banner-text">
+            <h2>INNOVATION MEETS RESPONSIBILITY IN EVERY PRODUCTS</h2>
+            </div>
+        </div>
+        </div>
+
+
+
+  
+<!-- Products Section -->
+<div class="container py-5">
+    <h2 class="text-center mb-5">
+        <span class="border-bottom border-dark pb-2">PRODUCTS</span>
+    </h2>
+    <div class="row g-4">
+        {% for product in products|slice:":4" %}
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+            <div class="card shadow-sm product-card">
+                <!-- Image Container -->
+                <div class="product-image-container">
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}" class="product-img" alt="{{ product.name }}">
+                    {% else %}
+                        <img src="{% static 'image/placeholder.jpg' %}" class="product-img" alt="Placeholder">
+                    {% endif %}
+                </div>
+                <!-- Wishlist Button in Top-Left Corner -->
+                <a href="{% url 'add_to_wishlist' product.id %}" class="wishlist-btn">
+                    <i class="bi bi-heart"></i>
+                </a>
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title product-title">{{ product.name }}</h5>
+                    <p class="card-text small-description">{{ product.small_description }}</p>
+                    <div class="star-rating">
+                        {% for i in "12345" %}
+                            {% if forloop.counter <= product.star_rating %}
+                                <span>★</span>
+                            {% else %}
+                                <span>☆</span>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div class="text-center my-2">
+                        <span class="price">₹{{ product.price }}</span>
+                        {% if product.offer_price %}
+                            <span class="offer-price">₹{{ product.offer_price }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center py-4">
+            <p>No products available at the moment.</p>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="text-center mt-5">
+            <a href="{% url 'our_products' %}" class="btn btn-outline-primary px-4">
+                 All Products <i class="bi bi-arrow-right ms-2"></i>
+            </a>
+        </div>
+    </div>
+</div>
+
+
+<div class="recommend-section">
+<div class="recommend-text">
+"THE PRODUCTS WE RECOMMEND ARE IMPECCABLE IN THEIR CLASS AND DELIVER SUBSTANTIAL CLEANING RESULTS"
+</div>
+</div>
+
+<!-- Shuffled Recommended Products Section -->
     <div class="container py-5">
         <h2 class="text-center mb-5">
-            <span class="border-bottom border-dark pb-2">Featured Products</span>
+            <span class="border-bottom border-dark pb-2">RECOMMENDED PRODUCTS</span>
         </h2>
         <div class="row g-4">
-            {% for product in products %}
+            {% for product in shuffled_products|slice:":8" %}
             <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                <div class="card shadow-sm">
-                    {% if product.image %}
-                        <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
-                    {% else %}
-                        <img src="{% static 'image/placeholder.jpg' %}" class="card-img-top" alt="Placeholder">
-                    {% endif %}
-                    <div class="card-body">
-                        <h5 class="card-title">{{ product.name }}</h5>
+                <div class="card shadow-sm product-card">
+                    <!-- Image Container -->
+                    <div class="product-image-container">
+                        {% if product.image %}
+                            <img src="{{ product.image.url }}" class="product-img" alt="{{ product.name }}">
+                        {% else %}
+                            <img src="{% static 'image/placeholder.jpg' %}" class="product-img" alt="Placeholder">
+                        {% endif %}
+                    </div>
+                    <!-- Wishlist Button in Top-Left Corner -->
+                    <a href="{% url 'add_to_wishlist' product.id %}" class="wishlist-btn">
+                        <i class="bi bi-heart"></i>
+                    </a>
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title product-title">{{ product.name }}</h5>
                         <p class="card-text small-description">{{ product.small_description }}</p>
                         <div class="star-rating">
                             {% for i in "12345" %}
@@ -174,28 +256,57 @@
                         <div class="text-center my-2">
                             <span class="price">₹{{ product.price }}</span>
                             {% if product.offer_price %}
-                            <span class="offer-price">₹{{ product.offer_price }}</span>
+                                <span class="offer-price">₹{{ product.offer_price }}</span>
                             {% endif %}
-                        </div>
-                        <div class="d-flex justify-content-center gap-2">
-                            {% if product.id|stringformat:"s" in cart %}
-                                <a href="{% url 'cart' %}" class="btn btn-success btn-sm">Go to Cart</a>
-                            {% else %}
-                                <a href="{% url 'add_to_cart' product.id %}" class="btn btn-primary btn-sm"><i class="bi bi-cart-plus"></i> Add to Cart</a>
-                            {% endif %}
-                            <a href="{% url 'buy_now' product.id %}" class="btn btn-outline-primary btn-sm">Buy Now</a>
-                            <a href="{% url 'add_to_wishlist' product.id %}" class="btn btn-outline-danger btn-sm"><i class="bi bi-heart"></i> Wishlist</a>
                         </div>
                     </div>
                 </div>
             </div>
             {% empty %}
             <div class="col-12 text-center py-4">
-                <p>No products available at the moment.</p>
+                <p>No recommended products available at the moment.</p>
             </div>
             {% endfor %}
         </div>
     </div>
+
+
+
+
+
+
+    <div class="slider-container">
+    <div class="slider-track">
+        <img src="{% static 'image/rl-1.jpg' %}" alt="Logo 1">
+        <img src="{% static 'image/rl-2.jpg' %}" alt="Logo 2">
+        <img src="{% static 'image/rl-3.jpg' %}" alt="Logo 3">
+        <img src="{% static 'image/rl-4.jpg' %}" alt="Logo 4">
+        <img src="{% static 'image/rl-5.jpg' %}" alt="Logo 5">
+        <img src="{% static 'image/rl-6.jpg' %}" alt="Logo 6">
+
+        <img src="{% static 'image/rl-1.jpg' %}" alt="Logo 1">
+        <img src="{% static 'image/rl-2.jpg' %}" alt="Logo 2">
+        <img src="{% static 'image/rl-3.jpg' %}" alt="Logo 3">
+        <img src="{% static 'image/rl-4.jpg' %}" alt="Logo 4">
+        <img src="{% static 'image/rl-5.jpg' %}" alt="Logo 5">
+        <img src="{% static 'image/rl-6.jpg' %}" alt="Logo 6">
+        <!-- Repeat logos for seamless loop -->
+        <img src="{% static 'image/rl-1.jpg' %}" alt="Logo 1">
+        <img src="{% static 'image/rl-2.jpg' %}" alt="Logo 2">
+        <img src="{% static 'image/rl-3.jpg' %}" alt="Logo 3">
+        <img src="{% static 'image/rl-4.jpg' %}" alt="Logo 4">
+        <img src="{% static 'image/rl-5.jpg' %}" alt="Logo 5">
+        <img src="{% static 'image/rl-6.jpg' %}" alt="Logo 6">
+
+        <img src="{% static 'image/rl-1.jpg' %}" alt="Logo 1">
+        <img src="{% static 'image/rl-2.jpg' %}" alt="Logo 2">
+        <img src="{% static 'image/rl-3.jpg' %}" alt="Logo 3">
+        <img src="{% static 'image/rl-4.jpg' %}" alt="Logo 4">
+        <img src="{% static 'image/rl-5.jpg' %}" alt="Logo 5">
+        <img src="{% static 'image/rl-6.jpg' %}" alt="Logo 6">
+    </div>
+    </div>
+
 
     <!-- Footer -->
     <footer class="footer py-5">

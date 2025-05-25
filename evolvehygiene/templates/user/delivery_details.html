@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/user/delivery-details.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <h2 class="text-uppercase fw-bold mb-4" style="background-color: #5a4aef; color: white; padding: 10px;">Delivery Address</h2>
+  
+  <form method="POST" action="{% url 'save_delivery_details' product_id=product_id %}">
+    {% csrf_token %}
+    <div class="row g-3">
+      <!-- Name -->
+      <div class="col-md-6">
+        <label for="name" class="form-label">Name</label>
+        <input type="text" class="form-control" id="name" name="name" value="{{ user.username }}" required>
+      </div>
+      <!-- Phone Number -->
+      <div class="col-md-6">
+        <label for="phone" class="form-label">10-digit mobile number</label>
+        <input type="text" class="form-control" id="phone" name="phone" maxlength="10" pattern="\d{10}" required>
+      </div>
+      <!-- Pincode -->
+      <div class="col-md-6">
+        <label for="pincode" class="form-label">Pincode</label>
+        <input type="text" class="form-control" id="pincode" name="pincode" maxlength="6" pattern="\d{6}" required>
+      </div>
+      <!-- Address -->
+      <div class="col-md-6">
+        <label for="address" class="form-label">Address (Area and Street)</label>
+        <textarea class="form-control" id="address" name="address" rows="3" required></textarea>
+      </div>
+      <!-- City/District/Town -->
+      <div class="col-md-6">
+        <label for="city" class="form-label">City/District/Town</label>
+        <input type="text" class="form-control" id="city" name="city" required>
+      </div>
+      <!-- State -->
+      <div class="col-md-6">
+        <label for="state" class="form-label">State</label>
+        <select class="form-select" id="state" name="state" required>
+          <option value="" disabled selected>Select State</option>
+          <option value="Kerala">Kerala</option>
+          <!-- Add more states as needed -->
+        </select>
+      </div>
+      <!-- Address Type -->
+      <div class="col-12 mt-3">
+        <label class="form-label">Address Type</label>
+        <div class="d-flex gap-3">
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="address_type" id="home" value="home" checked>
+            <label class="form-check-label" for="home">
+              Home (All day delivery)
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="address_type" id="work" value="work">
+            <label class="form-check-label" for="work">
+              Work (Delivery between 10 AM - 5 PM)
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Buttons -->
+    <div class="mt-4">
+      <button type="submit" class="btn btn-warning text-uppercase fw-bold" style="background-color: #ff6200; border: none;">Save and Deliver Here</button>
+      <a href="{% url 'our_products' %}" class="btn btn-link text-primary">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

@@ -29,18 +29,23 @@ class Product(models.Model):
     name = models.CharField(max_length=200)
     description = models.TextField(blank=True)
     small_description = models.CharField(max_length=255, blank=True)
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
-    subcategory = models.ForeignKey(SubCategory, on_delete=models.SET_NULL, null=True, blank=True)
+    category = models.ForeignKey('Category', on_delete=models.SET_NULL, null=True, blank=True)
+    subcategory = models.ForeignKey('SubCategory', on_delete=models.SET_NULL, null=True, blank=True)
     brand = models.CharField(max_length=100)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     offer_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     stock = models.PositiveIntegerField(default=0)
-    image = models.ImageField(upload_to='product_images/', null=True, blank=True)
+    image = models.ImageField(upload_to='product_images/', null=True, blank=True)  # Main image
+    image_1 = models.ImageField(upload_to='product_images/', null=True, blank=True)  # Additional image 1
+    image_2 = models.ImageField(upload_to='product_images/', null=True, blank=True)  # Additional image 2
+    image_3 = models.ImageField(upload_to='product_images/', null=True, blank=True)  # Additional image 3
+    image_4 = models.ImageField(upload_to='product_images/', null=True, blank=True)  # Additional image 4
     is_available = models.BooleanField(default=True)
     weight_or_volume = models.CharField(max_length=50, blank=True)
     star_rating = models.PositiveIntegerField(default=1)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    specifications = models.JSONField(default=dict, blank=True)  # From your previous setup
 
     STAR_RATING_CHOICES = [
         (1, '1'),
@@ -56,6 +61,7 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
+        
 class UserActivity(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     email = models.EmailField()

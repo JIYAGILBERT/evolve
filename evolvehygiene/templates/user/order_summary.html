@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/user/order-summary.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <!-- Login Section -->
+  <div class="mb-4">
+    <h2 class="text-uppercase fw-bold" style="background-color: #5a4aef; color: white; padding: 10px;">1 LOGIN <i class="fas fa-check-circle text-success"></i></h2>
+    <p class="mt-2">{{ request.user.username }} +91{{ delivery_details.phone }}</p>
+    <a href="#" class="btn btn-link text-primary">CHANGE</a>
+  </div>
+
+  <!-- Delivery Address Section -->
+  <div class="mb-4">
+    <h2 class="text-uppercase fw-bold" style="background-color: #5a4aef; color: white; padding: 10px;">2 DELIVERY ADDRESS <i class="fas fa-check-circle text-success"></i></h2>
+    <p class="mt-2">
+      {{ delivery_details.name }}<br>
+      {{ delivery_details.address }}, {{ delivery_details.city }}, {{ delivery_details.state }} - {{ delivery_details.pincode }}
+    </p>
+    <a href="{% url 'delivery_details' product_id=product.id %}" class="btn btn-link text-primary">CHANGE</a>
+  </div>
+
+  <!-- Order Summary Section -->
+  <div class="mb-4">
+    <h2 class="text-uppercase fw-bold" style="background-color: #5a4aef; color: white; padding: 10px;">3 ORDER SUMMARY</h2>
+    <div class="row mt-3">
+      <div class="col-md-8">
+        <div class="d-flex align-items-center border p-3">
+          <img src="{{ product.image.url }}" alt="{{ product.name }}" style="width: 80px; height: 80px; object-fit: cover; margin-right: 15px;">
+          <div>
+            <h5>{{ product.name }}</h5>
+            <p>{{ product.small_description }}</p>
+            <p>Delivery by Thu May 29 | <span class="text-success">₹40 FREE</span></p>
+            <p><strong>₹{{ price }}</strong> <span class="text-muted text-decoration-line-through">₹{{ product.offer_price }}</span> <span class="text-success">({{ product.discount }}% off)</span></p>
+            <p>+ ₹{{ protect_promise_fee }} Protect Promise Fee</p>
+            <p class="text-success">Your Total Savings on this order ₹{{ savings }}</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <h5>PRICE DETAILS</h5>
+        <p>Price (1 item): ₹{{ price }}</p>
+        <p>Delivery Charges: <span class="text-success">₹40 FREE</span></p>
+        <p>Protect Promise Fee: ₹{{ protect_promise_fee }}</p>
+        <h5>TOTAL PAYABLE: ₹{{ total }}</h5>
+        <p class="text-success">Your Total Savings on this order ₹{{ savings }}</p>
+        <p><i class="fas fa-shield-alt"></i> Safe and Secure Payments. Easy returns. 100% Authentic products.</p>
+      </div>
+    </div>
+    <p>Order confirmation email will be sent to {{ request.user.email }}</p>
+    <a href="{% url 'razorpay_payment' %}" class="btn btn-warning text-uppercase fw-bold" style="background-color: #ff6200; border: none;">CONTINUE</a>
+  </div>
+
+  <!-- Payment Options Section -->
+  <div>
+    <h2 class="text-uppercase fw-bold" style="background-color: #5a4aef; color: white; padding: 10px;">4 PAYMENT OPTIONS</h2>
+  </div>
+</div>
+{% endblock %}

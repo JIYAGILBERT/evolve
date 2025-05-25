@@ -1,17 +1,11 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block content %}
+{% load custom_filters %}
 {% block extra_css %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-
-
+    <!-- Add any extra CSS specific to this page here -->
+    <!-- For example: <link rel="stylesheet" href="{% static 'css/wishlist.css' %}"> -->
+{% endblock %}
+{% block content %}
 <div class="container mt-4">
     <h1 class="mb-4">Your Wishlist</h1>
     
@@ -35,7 +29,7 @@
                                 {% if item.product.offer_price %}
                                     <span class="text-muted text-decoration-line-through">₹{{ item.product.offer_price }}</span>
                                     <span class="text-success">
-                                        ({{ item.product.price|calculate_discount:item.product.offer_price}}% off)
+                                        ({{ item.product.price|calculate_discount:item.product.offer_price }}% off)
                                     </span><br>
                                 {% endif %}
                                 <strong>Brand:</strong> {{ item.product.brand }}<br>
@@ -61,5 +55,3 @@
     {% endif %}
 </div>
 {% endblock %}
-</body>
-</html>
