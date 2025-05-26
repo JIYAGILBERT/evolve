@@ -1,87 +1,196 @@
+/* product_detail.css */
 
-body {
-    font-family: 'Roboto', sans-serif;
+/* General container styling */
+.container {
+    max-width: 1200px;
+    padding: 20px;
 }
 
-.product-name {
-    font-size: 24px;
-    font-weight: 500;
-    color: #212121;
+/* Product Image Gallery */
+.product-image-gallery {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
 }
 
-.product-rating .badge {
-    background-color: #FFE500;
-    color: #212121;
-    font-size: 14px;
-    padding: 5px 10px;
+/* Thumbnail Images */
+.thumbnail-images {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
-.current-price {
-    font-weight: bold;
-    color: #212121;
-}
-
-.original-price {
-    font-size: 16px;
-}
-
-.discount {
-    font-size: 14px;
-}
-
-.stock-status {
-    font-size: 14px;
-}
-
-.product-actions .btn-primary {
-    background-color: #2874F0;
-    border: none;
-    padding: 10px 20px;
-}
-
-.product-actions .btn-primary:hover {
-    background-color: #1a5dc4;
-}
-
-.product-actions .btn-success {
-    background-color: #FB641B;
-    border: none;
-    padding: 10px 20px;
-}
-
-.product-actions .btn-success:hover {
-    background-color: #e55a17;
-}
-
-.product-description h4 {
-    font-size: 18px;
-    font-weight: 500;
-    color: #212121;
-}
-
-.product-description p {
-    color: #666;
-    font-size: 14px;
-}
-
-.specifications h3, .related-products h3 {
-    font-size: 20px;
-    font-weight: 500;
-    color: #212121;
-    border-bottom: 1px solid #e0e0e0;
-    padding-bottom: 10px;
-}
-
-.table-bordered td {
-    font-size: 14px;
-    color: #666;
-}
-
-.card-img-top {
-    height: 150px;
+.thumbnail {
+    width: 60px;
+    height: 60px;
     object-fit: cover;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    transition: border-color 0.3s ease, transform 0.3s ease;
 }
 
 .thumbnail:hover {
-    opacity: 0.8;
+    border-color: #007bff;
+    transform: scale(1.05);
+    cursor: pointer;
+}
+
+.thumbnail.active {
+    border-color: #007bff;
+}
+
+/* Main Product Image */
+.main-image {
+    flex-grow: 1;
+}
+
+#main-product-image {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+#main-product-image:hover {
+    transform: scale(1.02);
+}
+
+/* Product Actions (Buttons) */
+.product-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.btn-cart,
+.btn-buy {
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: 500;
+    border-radius: 25px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-cart {
+    background-color: #28a745;
+    color: white;
+    border: none;
+}
+
+.btn-cart:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
+}
+
+.btn-buy {
+    background-color: #007bff;
+    color: white;
+    border: none;
+}
+
+.btn-buy:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+/* Product Details */
+.product-name {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.product-description {
+    margin-top: 20px;
+}
+
+.product-description h4 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.product-description h5 {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #555;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.product-description p {
+    font-size: 1rem;
+    color: #666;
+    line-height: 1.6;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .product-image-gallery {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .thumbnail-images {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+
+    .thumbnail {
+        width: 50px;
+        height: 50px;
+    }
+
+    #main-product-image {
+        max-width: 100%;
+    }
+
+    .product-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .btn-cart,
+    .btn-buy {
+        width: 100%;
+        max-width: 300px;
+    }
+
+    .product-name {
+        font-size: 1.75rem;
+    }
+
+    .product-description h4 {
+        font-size: 1.3rem;
+    }
+
+    .product-description h5 {
+        font-size: 1.1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .container {
+        padding: 15px;
+    }
+
+    .product-name {
+        font-size: 1.5rem;
+    }
+
+    .product-description h4 {
+        font-size: 1.2rem;
+    }
+
+    .product-description p {
+        font-size: 0.9rem;
+    }
 }

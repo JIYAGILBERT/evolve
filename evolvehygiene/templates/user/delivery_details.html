@@ -9,7 +9,7 @@
 <div class="container py-5">
   <h2 class="text-uppercase fw-bold mb-4" style="background-color: #5a4aef; color: white; padding: 10px;">Delivery Address</h2>
   
-  <form method="POST" action="{% url 'save_delivery_details' product_id=product_id %}">
+  <form method="POST" action="{% url 'save_delivery_details' product_id=product.id %}">
     {% csrf_token %}
     <div class="row g-3">
       <!-- Name -->

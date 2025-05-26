@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/user/cod_captcha.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="captcha-container">
+    <h2>Verify You're Not a Bot</h2>
+    <p>Please enter the code below:</p>
+    <div class="captcha-code">
+        <strong>{{ captcha }}</strong>
+    </div>
+    <form method="post" action="{% url 'cod_captcha' %}">
+        {% csrf_token %}
+        <input type="text" name="captcha_input" placeholder="Enter the code" required>
+        <button type="submit" class="btn confirm-btn">Confirm Order</button>
+    </form>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+</div>
+{% endblock %}

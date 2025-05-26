@@ -6,11 +6,14 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required 
 from django.core.exceptions import ValidationError
 from .forms import ProfileForm, CategoryForm, SubCategoryForm, ContactForm
-from .models import Profile, Category, SubCategory, Product, UserActivity, ContactMessage, Order, OrderItem
+from .models import Profile, Category, SubCategory, Product, UserActivity, ContactMessage, Order, OrderItem, DeliveryDetails
 import random
 from django.shortcuts import render
 import razorpay
 from django.conf import settings
+import string
+from django.urls import reverse
+from datetime import datetime, timedelta
 
 # Initialize Razorpay client
 razorpay_client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
@@ -98,6 +101,12 @@ def usersignup(request):
             return redirect('user_login')
     return render(request, "user/usersignup.html")
 
+# evolve/views.py
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login
+from django.contrib import messages
+from .models import UserActivity  # Import UserActivity model
+
 def user_login(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -105,7 +114,6 @@ def user_login(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            # Log the user activity
             UserActivity.objects.create(
                 user=user,
                 email=user.email,
@@ -113,13 +121,17 @@ def user_login(request):
             )
             request.session['username'] = user.username
             messages.success(request, 'Login successful!')
-            # Check if the user is a superuser
-            if user.is_superuser:
-                return redirect('admin-home')  # Redirect superuser to admin-home
-            return redirect('home')  # Redirect regular user to home
+            next_url = request.GET.get('next', 'admin-home' if user.is_superuser else 'home')
+            return redirect(next_url)
         else:
             messages.error(request, 'Invalid username or password.')
-    return render(request, 'user/user_login.html')
+            return render(request, 'user/user_login.html')
+    else:
+        if 'next' in request.GET:
+            messages.info(request, 'Please log in to continue.')
+        return render(request, 'user/user_login.html')
+
+
 
 def passwordreset(request):
     if request.method == 'POST':
@@ -152,7 +164,7 @@ def logoutuser(request):
 
 @login_required
 def profile(request):
-    profile = request.user.profile
+    profile = Profile.objects.get(user=request.user) 
     return render(request, 'user/profile.html', {'profile': profile})
 
 def validate_phone(value):
@@ -271,9 +283,18 @@ def cart_count(request):
     cart_count = sum(cart.values())  # Sum of quantities
     return {'cart_count': cart_count}
 
+# evolve/views.py
+from django.shortcuts import render, get_object_or_404
+from .models import Product  # Ensure Product model is imported
+
+@login_required(login_url='user_login')
 def buy_now(request, product_id):
     # Get the product
-    product = get_object_or_404(Product, id=product_id)
+    try:
+        product = Product.objects.get(id=product_id)
+    except Product.DoesNotExist:
+        messages.error(request, 'Product not found.')
+        return redirect('our_products')
     
     # Add the product to the cart in the session
     if 'cart' not in request.session:
@@ -285,7 +306,12 @@ def buy_now(request, product_id):
     request.session.modified = True
     
     # Render the delivery details page
-    return render(request, 'user/delivery_details.html', {'product': product})
+    return render(request, 'user/delivery_details.html', {
+        'product': product,
+        'product_id': product_id  # Add product_id to the context
+    })
+
+
 
 
 def checkout(request):
@@ -327,7 +353,56 @@ def payment_options(request):
         'total': total
     })
 
-@login_required
+@login_required(login_url='user_login')
+def save_delivery_details(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    
+    if request.method == 'POST':
+        try:
+            name = request.POST.get('name')
+            phone = request.POST.get('phone')
+            pincode = request.POST.get('pincode')
+            address = request.POST.get('address')
+            city = request.POST.get('city')
+            state = request.POST.get('state')
+            address_type = request.POST.get('address_type')
+
+            if not all([name, phone, pincode, address, city, state, address_type]):
+                messages.error(request, 'All fields are required.')
+                return render(request, 'user/delivery_details.html', {'product': product, 'product_id': product_id})
+
+            DeliveryDetails.objects.create(
+                user=request.user,
+                product=product,
+                name=name,
+                phone=phone,
+                pincode=pincode,
+                address=address,
+                city=city,
+                state=state,
+                address_type=address_type
+            )
+            request.session['delivery_details'] = {
+                'name': name,
+                'phone': phone,
+                'address': address,
+                'city': city,
+                'state': state,
+                'pincode': pincode,
+                'address_type': address_type
+            }
+            request.session.modified = True
+
+            messages.success(request, 'Delivery details saved successfully.')
+            return redirect('order_summary', product_id=product_id)
+        
+        except Exception as e:
+            messages.error(request, f'Error saving delivery details: {str(e)}')
+            return render(request, 'user/delivery_details.html', {'product': product, 'product_id': product_id})
+    
+    return render(request, 'user/delivery_details.html', {'product': product, 'product_id': product_id})
+
+@login_required(login_url='user_login')
 def razorpay_payment(request):
     if request.method == 'POST':
         cart = request.session.get('cart', {})
@@ -335,7 +410,6 @@ def razorpay_payment(request):
             messages.error(request, "Your cart is empty.")
             return redirect('our_products')
 
-        # Calculate total amount
         total_amount = 0
         cart_items = []
         for product_id, quantity in cart.items():
@@ -348,17 +422,13 @@ def razorpay_payment(request):
             })
             total_amount += total_price
 
-        # Convert total_amount to paise (Razorpay expects amount in smallest currency unit)
         amount_in_paise = int(total_amount * 100)
-
-        # Create Razorpay order
         razorpay_order = razorpay_client.order.create({
             "amount": amount_in_paise,
             "currency": settings.CURRENCY,
-            "payment_capture": "1"  # Auto-capture payment
+            "payment_capture": "1"
         })
 
-        # Create Order in database
         order = Order.objects.create(
             user=request.user,
             total_amount=total_amount,
@@ -366,7 +436,6 @@ def razorpay_payment(request):
             razorpay_order_id=razorpay_order['id']
         )
 
-        # Add OrderItems
         for item in cart_items:
             OrderItem.objects.create(
                 order=order,
@@ -375,11 +444,9 @@ def razorpay_payment(request):
                 price=item['product'].price
             )
 
-        # Clear the cart
         request.session['cart'] = {}
         request.session.modified = True
 
-        # Pass delivery details to the template
         delivery_details = request.session.get('delivery_details', {})
 
         return render(request, 'user/razorpay_payment.html', {
@@ -388,11 +455,33 @@ def razorpay_payment(request):
             'razorpay_key_id': settings.RAZORPAY_KEY_ID,
             'amount': amount_in_paise,
             'currency': settings.CURRENCY,
-            'callback_url': request.build_absolute_uri('/order-success/' + str(order.id) + '/'),
-            'delivery_details': delivery_details  # Add this to the context
+            'callback_url': request.build_absolute_uri(reverse('order_success', args=[order.id])),
+            'delivery_details': delivery_details
         })
 
     return redirect('payment_options')
+
+
+
+@login_required
+def track_order(request, order_id):
+    order = get_object_or_404(Order, id=order_id, user=request.user)
+    # Add tracking logic here
+    return render(request, 'user/track_order.html', {'order': order})
+
+@login_required
+def my_orders(request):
+    orders = Order.objects.filter(user=request.user).order_by('-created_at')
+    return render(request, 'user/my_orders.html', {'orders': orders})
+
+@login_required
+def edit_delivery_details(request):
+    # Add logic to edit delivery details
+    return render(request, 'user/edit_delivery_details.html')
+
+
+
+
 
 
 @login_required
@@ -400,7 +489,6 @@ def order_success(request, order_id):
     order = get_object_or_404(Order, id=order_id, user=request.user)
 
     if order.payment_method == 'razorpay' and order.payment_status == 'pending':
-        # Verify Razorpay payment
         razorpay_payment_id = request.GET.get('razorpay_payment_id', '')
         status = request.GET.get('status', '')
         if razorpay_payment_id and status == 'success':
@@ -414,9 +502,19 @@ def order_success(request, order_id):
             messages.error(request, f"Payment failed: {error_description}. Please try again.")
             return redirect('cart')
 
-    return render(request, 'user/order_success.html', {'order': order})
-    
-# evolvehygiene/evolve/views.py
+    # Calculate delivery date (e.g., 7 days from today)
+    delivery_date = datetime.now() + timedelta(days=7)
+    delivery_date_str = delivery_date.strftime("%a, %b %d '%y").upper()  # e.g., TUE, JUN 3 '25
+
+    delivery_details = request.session.get('delivery_details', {})
+    context = {
+        'order': order,
+        'delivery_date': delivery_date_str,
+        'delivery_details': delivery_details,
+    }
+    return render(request, 'user/order_success.html', context)
+
+
 @login_required
 def cash_on_delivery(request):
     if request.method == 'POST':
@@ -425,7 +523,7 @@ def cash_on_delivery(request):
             messages.error(request, "Your cart is empty.")
             return redirect('our_products')
 
-        # Calculate total amount
+        # Store cart details temporarily in session
         total_amount = 0
         cart_items = []
         for product_id, quantity in cart.items():
@@ -438,30 +536,69 @@ def cash_on_delivery(request):
             })
             total_amount += total_price
 
-        # Create Order in database with COD
+        request.session['pending_order'] = {
+            'cart_items': [
+                {
+                    'product_id': item['product'].id,
+                    'quantity': item['quantity'],
+                    'total_price': float(item['total_price'])
+                } for item in cart_items
+            ],
+            'total_amount': float(total_amount)
+        }
+        request.session.modified = True
+
+        return redirect('cod_captcha')
+
+    return redirect('payment_options')
+
+
+
+
+@login_required
+def cod_captcha(request):
+    if request.method == 'POST':
+        user_input = request.POST.get('captcha_input')
+        captcha = request.session.get('captcha')
+        if user_input != captcha:
+            messages.error(request, "Invalid CAPTCHA. Please try again.")
+            return redirect('cod_captcha')
+
+        # CAPTCHA is valid, create the order
+        pending_order = request.session.get('pending_order', {})
+        if not pending_order:
+            messages.error(request, "Order session expired. Please try again.")
+            return redirect('cart')
+
+        # Create Order
         order = Order.objects.create(
             user=request.user,
-            total_amount=total_amount,
+            total_amount=pending_order['total_amount'],
             payment_method='cod',
-            payment_status='pending'  # COD orders remain pending until delivery
+            payment_status='pending'
         )
 
         # Add OrderItems
-        for item in cart_items:
+        for item in pending_order['cart_items']:
+            product = get_object_or_404(Product, id=item['product_id'])
             OrderItem.objects.create(
                 order=order,
-                product=item['product'],
+                product=product,
                 quantity=item['quantity'],
-                price=item['product'].price
+                price=product.price
             )
 
-        # Clear the cart
+        # Clear the cart and session
         request.session['cart'] = {}
+        request.session.pop('pending_order', None)
         request.session.modified = True
 
         return redirect('order_success', order_id=order.id)
 
-    return redirect('payment_options')
+    # Generate a 4-character CAPTCHA (letters and numbers)
+    captcha = ''.join(random.choices(string.ascii_uppercase + string.digits, k=4))
+    request.session['captcha'] = captcha
+    return render(request, 'user/cod_captcha.html', {'captcha': captcha})
 
 
 
@@ -580,36 +717,66 @@ def mark_notification_read(request, message_id):
 
 
 
-
-
-
-
-
-@login_required
 def delivery_details(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     return render(request, 'user/delivery_details.html', {
-        'product_id': product_id,
+        'product': product,
         'user': request.user
     })
 
-@login_required
+
+@login_required(login_url='user_login')
 def save_delivery_details(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    
     if request.method == 'POST':
-        # Save delivery details in session
-        delivery_details = {
-            'name': request.POST.get('name'),
-            'phone': request.POST.get('phone'),
-            'pincode': request.POST.get('pincode'),
-            'address': request.POST.get('address'),
-            'city': request.POST.get('city'),
-            'state': request.POST.get('state'),
-            'address_type': request.POST.get('address_type'),
-        }
-        request.session['delivery_details'] = delivery_details
-        request.session.modified = True
-        return redirect('order_summary', product_id=product_id)
-    return redirect('delivery_details', product_id=product_id)
+        try:
+            name = request.POST.get('name')
+            phone = request.POST.get('phone')
+            pincode = request.POST.get('pincode')
+            address = request.POST.get('address')
+            city = request.POST.get('city')
+            state = request.POST.get('state')
+            address_type = request.POST.get('address_type')
+
+            if not all([name, phone, pincode, address, city, state, address_type]):
+                messages.error(request, 'All fields are required.')
+                return render(request, 'user/delivery_details.html', {'product': product, 'product_id': product_id})
+
+            # Save delivery details
+            delivery = DeliveryDetails.objects.create(
+                user=request.user,
+                product=product,
+                name=name,
+                phone=phone,
+                pincode=pincode,
+                address=address,
+                city=city,
+                state=state,
+                address_type=address_type
+            )
+            # Store delivery details in session for Razorpay
+            request.session['delivery_details'] = {
+                'name': name,
+                'phone': phone,
+                'address': address,
+                'city': city,
+                'state': state,
+                'pincode': pincode,
+                'address_type': address_type
+            }
+            request.session.modified = True
+
+            messages.success(request, 'Delivery details saved successfully.')
+            return redirect('order_summary', product_id=product_id)
+        
+        except Exception as e:
+            messages.error(request, f'Error saving delivery details: {str(e)}')
+            return render(request, 'user/delivery_details.html', {'product': product, 'product_id': product_id})
+    
+    return render(request, 'user/delivery_details.html', {'product': product, 'product_id': product_id})
+    
+
 
 @login_required
 def order_summary(request, product_id):
@@ -845,27 +1012,30 @@ def edit_product(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     categories = Category.objects.all()
     subcategories = SubCategory.objects.all()
-    star_rating_choices = [(i, str(i)) for i in range(1, 6)]  # [(1, '1'), (2, '2'), ..., (5, '5')]
-    if request.method == 'POST':
-        product.name = request.POST.get('name')
-        product.description = request.POST.get('description')
-        product.small_description = request.POST.get('small_description')
-        category_id = request.POST.get('category')
-        subcategory_id = request.POST.get('subcategory')
-        product.brand = request.POST.get('brand')
-        product.price = request.POST.get('price')
-        product.offer_price = request.POST.get('offer_price') or None
-        product.stock = request.POST.get('stock')
-        if request.FILES.get('image'):
-            product.image = request.FILES.get('image')
-        product.is_available = request.POST.get('is_available') == 'on'
-        product.weight_or_volume = request.POST.get('weight_or_volume')
-        product.star_rating = request.POST.get('star_rating')
+    star_rating_choices = Product.STAR_RATING_CHOICES
 
-        if category_id and subcategory_id:
-            subcategory = SubCategory.objects.get(id=subcategory_id)
-            if subcategory.category.id != int(category_id):
-                messages.error(request, 'Selected subcategory does not belong to the chosen category.')
+    if request.method == 'POST':
+        try:
+            # Extract form data
+            product.name = request.POST.get('name')
+            product.description = request.POST.get('description', '')
+            product.small_description = request.POST.get('small_description', '')
+            category_id = request.POST.get('category')
+            subcategory_id = request.POST.get('subcategory')
+            product.brand = request.POST.get('brand', '')
+            product.price = request.POST.get('price')
+            product.offer_price = request.POST.get('offer_price') or None
+            product.stock = request.POST.get('stock')
+            product.is_available = request.POST.get('is_available') == 'on'
+            product.weight_or_volume = request.POST.get('weight_or_volume', '')
+            product.star_rating = request.POST.get('star_rating')
+            specifications_raw = request.POST.get('specifications', '{}')
+
+            # Handle JSON specifications
+            try:
+                product.specifications = json.loads(specifications_raw)
+            except json.JSONDecodeError:
+                messages.error(request, "Invalid JSON format in Specifications field.")
                 return render(request, 'admin/edit_product.html', {
                     'product': product,
                     'categories': categories,
@@ -873,18 +1043,45 @@ def edit_product(request, product_id):
                     'star_rating_choices': star_rating_choices
                 })
 
-        if category_id:
-            product.category = Category.objects.get(id=category_id)
-        else:
-            product.category = None
-        if subcategory_id:
-            product.subcategory = SubCategory.objects.get(id=subcategory_id)
-        else:
-            product.subcategory = None
+            # Handle category and subcategory
+            if category_id and subcategory_id:
+                subcategory = SubCategory.objects.get(id=subcategory_id)
+                if subcategory.category.id != int(category_id):
+                    messages.error(request, 'Selected subcategory does not belong to the chosen category.')
+                    return render(request, 'admin/edit_product.html', {
+                        'product': product,
+                        'categories': categories,
+                        'subcategories': subcategories,
+                        'star_rating_choices': star_rating_choices
+                    })
 
-        product.save()
-        messages.success(request, 'Product updated successfully!')
-        return redirect('product_list')
+            product.category = Category.objects.get(id=category_id) if category_id else None
+            product.subcategory = SubCategory.objects.get(id=subcategory_id) if subcategory_id else None
+
+            # Handle image uploads
+            if 'image' in request.FILES:
+                product.image = request.FILES['image']
+            if 'image_1' in request.FILES:
+                product.image_1 = request.FILES['image_1']
+            if 'image_2' in request.FILES:
+                product.image_2 = request.FILES['image_2']
+            if 'image_3' in request.FILES:
+                product.image_3 = request.FILES['image_3']
+            if 'image_4' in request.FILES:
+                product.image_4 = request.FILES['image_4']
+
+            product.save()
+            messages.success(request, 'Product updated successfully!')
+            return redirect('product_list')
+
+        except Exception as e:
+            messages.error(request, f"Error updating product: {str(e)}")
+            return render(request, 'admin/edit_product.html', {
+                'product': product,
+                'categories': categories,
+                'subcategories': subcategories,
+                'star_rating_choices': star_rating_choices
+            })
 
     return render(request, 'admin/edit_product.html', {
         'product': product,
@@ -892,6 +1089,10 @@ def edit_product(request, product_id):
         'subcategories': subcategories,
         'star_rating_choices': star_rating_choices
     })
+
+
+
+
 
 def delete_product(request, product_id):
     product = get_object_or_404(Product, id=product_id)

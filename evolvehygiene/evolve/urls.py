@@ -40,8 +40,12 @@ urlpatterns = [
     path('save_delivery_details/<int:product_id>/', views.save_delivery_details, name='save_delivery_details'),
     path('order_summary/<int:product_id>/', views.order_summary, name='order_summary'),
     path('razorpay_payment/', views.razorpay_payment, name='razorpay_payment'),
-    path('order_success/<int:order_id>/', views.order_success, name='order_success'),
-    
+   path('order_success/<int:order_id>/', views.order_success, name='order_success'),
+
+   path('cod_captcha/', views.cod_captcha, name='cod_captcha'),
+    path('track_order/<int:order_id>/', views.track_order, name='track_order'),  
+    path('my_orders/', views.my_orders, name='my_orders'), 
+    path('edit_delivery_details/', views.edit_delivery_details, name='edit_delivery_details'),  
     path('our_products/', views.our_products, name='our_products'),
     
     # Admin URLs

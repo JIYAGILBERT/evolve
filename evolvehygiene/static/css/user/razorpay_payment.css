@@ -1,27 +1,20 @@
-
-        .payment-container {
-            text-align: center;
-            padding: 50px;
-            background-color: #f8f9fa;
-            border-radius: 8px;
-            margin: 20px auto;
-            max-width: 600px;
-        }
-        .payment-container h1 {
-            font-size: 24px;
-            color: #5a4aef;
-            margin-bottom: 10px;
-        }
-        .payment-container p {
-            font-size: 16px;
-            color: #666;
-        }
-        .fallback-message {
-            display: none;
-            margin-top: 20px;
-            color: #ff6200;
-        }
-        .fallback-message a {
-            color: #ff6200;
-            text-decoration: underline;
-        }
+/* evolvehygiene/static/css/user/razorpay_payment.css */
+.container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    text-align: center;
+}
+.order-details {
+    margin-bottom: 20px;
+}
+.order-details p {
+    font-size: 16px;
+    margin: 5px 0;
+}
+h2, h3 {
+    color: #333;
+}

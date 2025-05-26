@@ -8,20 +8,24 @@
 
 {% block content %}
 <div class="success-container">
-    <h1>Order Placed Successfully!</h1>
-    <p>Thank you for your purchase. Your order has been placed successfully.</p>
-    <div class="order-details">
-        <h2>Order #{{ order.id }}</h2>
-        <p><strong>Total Amount:</strong> ₹{{ order.total_amount }}</p>
-        <p><strong>Payment Method:</strong> {{ order.get_payment_method_display }}</p>
-        <p><strong>Payment Status:</strong> {{ order.get_payment_status_display }}</p>
-        <h3>Order Items:</h3>
-        <ul>
-            {% for item in order.items.all %}
-                <li>{{ item.product.name }} (x{{ item.quantity }}) - ₹{{ item.price }}</li>
-            {% endfor %}
-        </ul>
+    <div class="left-section">
+        <h1>Thanks for shopping with us!</h1>
+        <p>Delivery by {{ delivery_date }}</p>
+        <a href="{% url 'track_order' order.id %}" class="track-link">Track & Manage order</a>
+        <p>Delivery by {{ delivery_date }}</p>
+        <a href="{% url 'home' %}" class="continue-btn">Continue Shopping</a>
     </div>
-    <a href="{% url 'home' %}" class="btn continue-btn">Continue Shopping</a>
+    <div class="right-section">
+        <div class="order-link">
+            <p>Why call? Just click!</p>
+            <a href="{% url 'my_orders' %}" class="btn orders-btn">Go to My Orders</a>
+        </div>
+        <div class="delivery-info">
+            <h3>{{ delivery_details.name }}</h3>
+            <p>{{ delivery_details.address_type|title }}: {{ delivery_details.address }}, {{ delivery_details.city }}, {{ delivery_details.state }} - {{ delivery_details.pincode }}</p>
+            <p>Phone number: {{ delivery_details.phone }}</p>
+            <a href="{% url 'edit_delivery_details' %}" class="change-link">Change or Add number</a>
+        </div>
+    </div>
 </div>
 {% endblock %}
