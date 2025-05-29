@@ -47,6 +47,21 @@
     margin-left: 4px;
 }
 
+
+
+
+
+        .star-rating {
+            color: #f4c430;
+            margin-bottom: 10px;
+        }
+        .small-description {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+
+
 /* Carousel Styles */
 .carousel-wrapper {
     width: 99%;

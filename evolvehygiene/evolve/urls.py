@@ -25,8 +25,9 @@ urlpatterns = [
     path('increase-quantity/<int:product_id>/', views.increase_quantity, name='increase_quantity'),
     path('decrease-quantity/<int:product_id>/', views.decrease_quantity, name='decrease_quantity'),
     path('remove-from-cart/<int:product_id>/', views.remove_from_cart, name='remove_from_cart'),
-    path('add-to-wishlist/<int:product_id>/', views.add_to_wishlist, name='add_to_wishlist'),
     path('cart/', views.cart, name='cart'),
+    path('add-to-wishlist/<int:product_id>/', views.add_to_wishlist, name='add_to_wishlist'),
+    path('remove-from-wishlist/<int:product_id>/', views.remove_from_wishlist, name='remove_from_wishlist'),
     path('wishlist/', views.wishlist, name='wishlist'),
 
 

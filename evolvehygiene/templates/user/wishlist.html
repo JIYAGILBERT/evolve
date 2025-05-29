@@ -2,54 +2,83 @@
 {% load static %}
 {% load custom_filters %}
 {% block extra_css %}
-    <!-- Add any extra CSS specific to this page here -->
-    <!-- For example: <link rel="stylesheet" href="{% static 'css/wishlist.css' %}"> -->
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+<link rel="stylesheet" href="{% static 'css/user/wishlist.css' %}">
 {% endblock %}
 {% block content %}
-<div class="container mt-4">
-    <h1 class="mb-4">Your Wishlist</h1>
+<div class="wishlist-container">
+    <h1 class="wishlist-header">My Wishlist ({{ wishlist_items|length }})</h1>
     
     {% if wishlist_items %}
-        <div class="row">
-            {% for item in wishlist_items %}
-                <div class="col-md-3 mb-4">
-                    <div class="card h-100">
-                        <!-- Product Image -->
+        {% for item in wishlist_items %}
+            <div class="wishlist-item">
+                <!-- Separate div for Product Image -->
+                <div class="wishlist-item-image">
+                    <a href="{% url 'product_detail' item.product.id %}">
                         {% if item.product.image %}
-                            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="card-img-top" style="height: 200px; object-fit: cover;">
+                            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
                         {% else %}
-                            <img src="https://via.placeholder.com/150" alt="No Image" class="card-img-top" style="height: 200px; object-fit: cover;">
+                            <img src="https://via.placeholder.com/100" alt="No Image">
                         {% endif %}
-                        
-                        <!-- Product Details -->
-                        <div class="card-body">
-                            <h5 class="card-title">{{ item.product.name }}</h5>
-                            <p class="card-text">
-                                <strong>Price:</strong> ₹{{ item.product.price }}<br>
-                                {% if item.product.offer_price %}
-                                    <span class="text-muted text-decoration-line-through">₹{{ item.product.offer_price }}</span>
-                                    <span class="text-success">
-                                        ({{ item.product.price|calculate_discount:item.product.offer_price }}% off)
-                                    </span><br>
-                                {% endif %}
-                                <strong>Brand:</strong> {{ item.product.brand }}<br>
-                                <strong>Availability:</strong> 
-                                {% if item.product.is_available %}
-                                    <span class="text-success">In Stock</span>
-                                {% else %}
-                                    <span class="text-danger">Out of Stock</span>
-                                {% endif %}
-                            </p>
-                            
-                            <!-- Add to Cart Button -->
-                            <a href="{% url 'add_to_cart' item.product.id %}" class="btn btn-outline-primary btn-sm w-100">
-                                <i class="bi bi-cart"></i> Add to Cart
-                            </a>
-                        </div>
-                    </div>
+                    </a>
                 </div>
-            {% endfor %}
-        </div>
+
+                <!-- Product Details -->
+                <div class="wishlist-item-details">
+                    <!-- Product Name with link to product_detail -->
+                    <a href="{% url 'product_detail' item.product.id %}">{{ item.product.name }}</a>
+                    <div>
+                        <!-- Price -->
+                        <span class="price">₹{{ item.product.price }}</span>
+                        <!-- Original Price (if offer_price exists) -->
+                        {% if item.product.offer_price %}
+                            <span class="original-price">₹{{ item.product.offer_price }}</span>
+                            <!-- Discount -->
+                            <span class="discount">
+                                {{ item.product.price|calculate_discount:item.product.offer_price }}% off
+                            </span>
+                        {% endif %}
+                    </div>
+                    <!-- Availability -->
+                    {% if not item.product.is_available or item.product.stock <= 0 %}
+                        <span class="unavailable">Currently unavailable</span>
+                    {% endif %}
+                </div>
+
+                <!-- Remove Button -->
+                <button class="btn-remove" onclick="removeFromWishlist({{ item.product.id }})">
+                    <i class="bi bi-trash" alt="Remove"></i>
+                </button>
+            </div>
+        {% endfor %}
+
+        <!-- JavaScript for Remove functionality -->
+        <script>
+            function removeFromWishlist(productId) {
+                if (confirm("Are you sure you want to remove this item from your wishlist?")) {
+                    fetch("{% url 'remove_from_wishlist' 0 %}".replace('0', productId), {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': '{{ csrf_token }}',
+                            'Content-Type': 'application/json',
+                        },
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            location.reload(); // Reload the page to update the wishlist
+                        } else {
+                            alert("Failed to remove item: " + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error:", error);
+                        alert("An error occurred while removing the item.");
+                    });
+                }
+            }
+        </script>
     {% else %}
         <p>Your wishlist is empty.</p>
     {% endif %}

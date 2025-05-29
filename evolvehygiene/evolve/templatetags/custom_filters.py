@@ -13,3 +13,15 @@ def calculate_discount(price, offer_price):
         return round(discount, 2)
     except (ValueError, TypeError):
         return 0
+    
+
+
+
+
+register = template.Library()
+
+@register.filter
+def calculate_discount(price, offer_price):
+    if offer_price and offer_price > 0:
+        return int(100 - (price / offer_price * 100))
+    return 0

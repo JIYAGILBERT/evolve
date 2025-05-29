@@ -14,6 +14,8 @@ from django.conf import settings
 import string
 from django.urls import reverse
 from datetime import datetime, timedelta
+from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import csrf_exempt 
 
 # Initialize Razorpay client
 razorpay_client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
@@ -64,6 +66,7 @@ def home(request):
         'products': products,  # For the first Products Section (not shuffled, limited to 8)
         'shuffled_products': shuffled_products,  # For the Recommended Products Section (shuffled)
         'cart': cart,
+        'wishlisted_product_ids': wishlisted_product_ids
     }
     return render(request, 'user/home.html', context)
 
@@ -615,9 +618,15 @@ def product_detail(request, product_id):
 
 
 def our_products(request):
-    # Fetch all products and randomize their order
-    products = list(Product.objects.all())
-    random.shuffle(products)  # Randomize the list of products
+    # Fetch all products or filter by subcategory
+    products = Product.objects.all()
+    subcategory_id = request.GET.get('subcategory')
+    if subcategory_id:
+        products = products.filter(subcategory_id=subcategory_id)
+    
+    # Convert to list and randomize (optional, comment out if not needed)
+    products = list(products)
+    random.shuffle(products)
     
     # Calculate discount for each product
     for product in products:
@@ -629,11 +638,20 @@ def our_products(request):
     # Get the cart from session
     cart = request.session.get('cart', {})
     
+    # Get wishlisted product IDs for the authenticated user
+    wishlisted_product_ids = []
+    if request.user.is_authenticated:
+        wishlisted_product_ids = Wishlist.objects.filter(user=request.user).values_list('product_id', flat=True)
+    
+    # Context for the template
     context = {
         'products': products,
-        'cart': cart
+        'cart': cart,
+        'wishlisted_product_ids': wishlisted_product_ids,
     }
     return render(request, 'user/our_products.html', context)
+
+
 
 def place_order(request, product_id):
     product = get_object_or_404(Product, id=product_id)
@@ -654,26 +672,30 @@ def place_order(request, product_id):
     return render(request, 'user/delivery_details.html', {'product': product})
 
 
+@login_required
 def add_to_wishlist(request, product_id):
-    # Placeholder: Add product to wishlist (using session for now)
     product = get_object_or_404(Product, id=product_id)
-    # Add to session-based wishlist
-    request.session['wishlist'] = request.session.get('wishlist', {})
-    request.session['wishlist'][str(product_id)] = request.session['wishlist'].get(str(product_id), 0) + 1
-    request.session.modified = True
-    messages.success(request, f"{product.name} added to your wishlist!")
-    return redirect('our_products')
+    wishlist_item, created = Wishlist.objects.get_or_create(user=request.user, product=product)
+    if not created:
+        wishlist_item.delete()  # Remove from wishlist if already exists
+        return JsonResponse({'status': 'removed', 'message': 'Removed from wishlist'})
+    return JsonResponse({'status': 'added', 'message': 'Added to wishlist'})
 
-
-# evolve/views.py
+@login_required
 def wishlist(request):
-    wishlist = request.session.get('wishlist', {})
-    products = []
-    for product_id in wishlist.keys():
-        product = get_object_or_404(Product, id=product_id)
-        products.append({'product': product, 'quantity': wishlist[product_id]})
+    # Get wishlist items for the authenticated user
+    wishlist_items = Wishlist.objects.filter(user=request.user).select_related('product')
+    products = [{'product': item.product, 'quantity': 1} for item in wishlist_items]  # Quantity set to 1 for consistency
     return render(request, 'user/wishlist.html', {'wishlist_items': products})
 
+# Other views (e.g., our_products, product_detail) can remain as-is
+def our_products(request):
+    # Your existing our_products view logic
+    pass
+
+def product_detail(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    return render(request, 'user/product_detail.html', {'product': product})
 
 def contact_us(request):
     if request.method == 'POST':
@@ -798,6 +820,26 @@ def order_summary(request, product_id):
         'savings': savings,
     })
 
+
+
+
+
+
+
+@require_POST
+@csrf_exempt  # For simplicity; in production, handle CSRF properly
+def remove_from_wishlist(request, product_id):
+    try:
+        wishlist = request.session.get('wishlist', {})
+        if str(product_id) in wishlist:
+            del wishlist[str(product_id)]
+            request.session['wishlist'] = wishlist
+            request.session.modified = True
+            return JsonResponse({'success': True, 'message': 'Item removed from wishlist.'})
+        else:
+            return JsonResponse({'success': False, 'message': 'Item not found in wishlist.'}, status=400)
+    except Exception as e:
+        return JsonResponse({'success': False, 'message': str(e)}, status=500)
 
 
 
