@@ -144,3 +144,7 @@ class Wishlist(models.Model):
 
     class Meta:
         unique_together = ['user', 'product']
+        indexes = [
+            models.Index(fields=['user']),
+            models.Index(fields=['product']),
+        ]

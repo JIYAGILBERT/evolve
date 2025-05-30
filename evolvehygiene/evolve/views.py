@@ -6,7 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required 
 from django.core.exceptions import ValidationError
 from .forms import ProfileForm, CategoryForm, SubCategoryForm, ContactForm
-from .models import Profile, Category, SubCategory, Product, UserActivity, ContactMessage, Order, OrderItem, DeliveryDetails
+from .models import Profile, Category, SubCategory, Product, UserActivity, ContactMessage, Order, OrderItem, DeliveryDetails,Wishlist
 import random
 from django.shortcuts import render
 import razorpay
@@ -51,6 +51,7 @@ def home(request):
     for product in products:
         if not product.id:
             print(f"Warning: Product '{product.name}' has no ID")
+            print("Wishlisted product IDs:", wishlisted_product_ids)
     
     # Fetch products for the shuffled Recommended Products Section
     shuffled_products = list(Product.objects.filter(id__isnull=False))
@@ -67,6 +68,8 @@ def home(request):
         'shuffled_products': shuffled_products,  # For the Recommended Products Section (shuffled)
         'cart': cart,
         'wishlisted_product_ids': wishlisted_product_ids
+
+       
     }
     return render(request, 'user/home.html', context)
 
@@ -618,40 +621,71 @@ def product_detail(request, product_id):
 
 
 def our_products(request):
-    # Fetch all products or filter by subcategory
-    products = Product.objects.all()
-    subcategory_id = request.GET.get('subcategory')
-    if subcategory_id:
-        products = products.filter(subcategory_id=subcategory_id)
-    
-    # Convert to list and randomize (optional, comment out if not needed)
-    products = list(products)
-    random.shuffle(products)
-    
-    # Calculate discount for each product
-    for product in products:
-        if product.offer_price and product.offer_price != 0:  # Avoid division by zero
-            product.discount = round(100 - (product.price / product.offer_price * 100))
-        else:
-            product.discount = 0
-    
-    # Get the cart from session
-    cart = request.session.get('cart', {})
-    
-    # Get wishlisted product IDs for the authenticated user
-    wishlisted_product_ids = []
-    if request.user.is_authenticated:
-        wishlisted_product_ids = Wishlist.objects.filter(user=request.user).values_list('product_id', flat=True)
-    
-    # Context for the template
-    context = {
-        'products': products,
-        'cart': cart,
-        'wishlisted_product_ids': wishlisted_product_ids,
-    }
-    return render(request, 'user/our_products.html', context)
+    try:
+        # Fetch all products or filter by subcategory
+        products = Product.objects.all()
+        subcategory_id = request.GET.get('subcategory')
+        if subcategory_id:
+            products = products.filter(subcategory_id=subcategory_id)
+        
+        # Convert to list and randomize (optional, comment out if not needed)
+        products = list(products)
+        random.shuffle(products)
+        
+        # Calculate discount for each product
+        for product in products:
+            if product.offer_price and product.offer_price != 0:  # Avoid division by zero
+                product.discount = round(100 - (product.price / product.offer_price * 100))
+            else:
+                product.discount = 0
+        
+        # Get the cart from session
+        cart = request.session.get('cart', {})
+        
+        # Get wishlisted product IDs for the authenticated user
+        wishlisted_product_ids = []
+        if request.user.is_authenticated:
+            wishlisted_product_ids = Wishlist.objects.filter(user=request.user).values_list('product_id', flat=True)
+        
+        # Context for the template
+        context = {
+            'products': products,
+            'cart': cart,
+            'wishlisted_product_ids': wishlisted_product_ids,
+        }
+        return render(request, 'user/our_products.html', context)
+    except Exception as e:
+        # Log the exception for debugging (you can use logging instead of print)
+        print(f"Error in our_products view: {str(e)}")
+        # Return a fallback response in case of an error
+        return HttpResponse(f"An error occurred: {str(e)}", status=500)
 
 
+def wishlisted_product_ids(request, product_id):
+    try:
+        if not request.user.is_authenticated:
+            return redirect('login')  # Redirect to login if user is not authenticated
+        
+        # Check if the product exists
+        try:
+            product = Product.objects.get(id=product_id)
+        except Product.DoesNotExist:
+            return HttpResponse("Product not found", status=404)
+        
+        # Toggle wishlist: add if not present, remove if already in wishlist
+        wishlist_item, created = Wishlist.objects.get_or_create(user=request.user, product=product)
+        if not created:
+            wishlist_item.delete()  # Remove from wishlist if already exists
+        
+        # Redirect back to the products page or render the wishlist template
+        context = {
+            'wishlisted_product_ids': Wishlist.objects.filter(user=request.user).values_list('product_id', flat=True)
+        }
+        return render(request, 'user/wishlist.html', context)
+    except Exception as e:
+        print(f"Error in wishlisted_product_ids view: {str(e)}")
+        return HttpResponse(f"An error occurred: {str(e)}", status=500)
+    
 
 def place_order(request, product_id):
     product = get_object_or_404(Product, id=product_id)
@@ -797,6 +831,9 @@ def save_delivery_details(request, product_id):
             return render(request, 'user/delivery_details.html', {'product': product, 'product_id': product_id})
     
     return render(request, 'user/delivery_details.html', {'product': product, 'product_id': product_id})
+
+
+
     
 
 
