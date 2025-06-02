@@ -17,6 +17,12 @@ from datetime import datetime, timedelta
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt 
 
+
+
+
+
+
+
 # Initialize Razorpay client
 razorpay_client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
 
@@ -626,8 +632,14 @@ def our_products(request):
         products = Product.objects.all()
         subcategory_id = request.GET.get('subcategory')
         if subcategory_id:
-            products = products.filter(subcategory_id=subcategory_id)
-        
+            try:
+                # Validate subcategory exists
+                subcategory = get_object_or_404(SubCategory, id=subcategory_id)
+                products = products.filter(subcategory=subcategory)
+            except ValueError:
+                print(f"Warning: Invalid subcategory ID: {subcategory_id}")
+                products = Product.objects.all()
+
         # Convert to list and randomize (optional, comment out if not needed)
         products = list(products)
         random.shuffle(products)
@@ -654,12 +666,12 @@ def our_products(request):
             'wishlisted_product_ids': wishlisted_product_ids,
         }
         return render(request, 'user/our_products.html', context)
+    
     except Exception as e:
-        # Log the exception for debugging (you can use logging instead of print)
+        # Print error for basic debugging
         print(f"Error in our_products view: {str(e)}")
-        # Return a fallback response in case of an error
-        return HttpResponse(f"An error occurred: {str(e)}", status=500)
-
+        # Return a fallback response
+        return HttpResponse("An unexpected error occurred. Please try again later.", status=500)
 
 def wishlisted_product_ids(request, product_id):
     try:
